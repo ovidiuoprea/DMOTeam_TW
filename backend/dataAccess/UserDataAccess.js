@@ -118,10 +118,33 @@ async function deleteUser (id, ORM = true) {
     }
 }
 
+/**
+ * @route POST /user-api/user with body
+ * @param {*} email 
+ * @param {*} password 
+ * @returns { error: boolean, message: "", object: user || null}
+ */
+async function login (email, password, ORM = true) { 
+    if(!ORM){
+        //TODO: Login without ORM
+    }
+    else {
+        const user = await User.findOne({where: {email: email}});
+        if(!user) { 
+            return {error: true, message: "User not found", object: null}
+        }
+        if(password != user.password) {
+            return {error: true, message: "Passwords don't match", object: null};
+        }
+        return {error: false, message: "Login successful", object: user};
+    }
+}
+
 export {
     getUser,
     createUser,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    login
 }
