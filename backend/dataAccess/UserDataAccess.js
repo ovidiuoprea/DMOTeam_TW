@@ -23,7 +23,7 @@ async function getUser(ORM = true) {
  * Use JSON.stringify() in React to provide consistent data.
  * @route POST /user-api/user with body
  * @param {type: JSON { name: " ", email: " ", password: " ", role: " "}} user 
- * @param {type: boolean} ORM 
+ * @param {type: boolean} ORM true = use Sequelize ORM, false = use MySQL pool 
  * @returns User inserted in the database.
  */
 
@@ -40,7 +40,31 @@ async function createUser(user, ORM = true) {
     }
 }
 
+/**
+ * @route GET /user-api/:user_id;
+ * @param {type: Number} id Requested user's user_id
+ * @param {type: Boolean} ORM true = use Sequelize ORM, false = use MySQL pool 
+ * @returns User with specified user_id
+ */
+async function getUserById(user_id, ORM = true) {
+    if(!ORM) { 
+        const sql = "SELECT * FROM Users WHERE user_id = ?";
+        const [rows] = await conn.query(sql, user_id);
+
+        // If no user is found, Sequelize returns null, so I'm mimicking the behavior here too:
+        if(rows.length == 0) {
+            return null;
+        }
+        
+        return rows;
+    }
+    else {
+        return await User.findByPk(user_id);
+    }
+}
+
 export {
     getUser,
-    createUser
+    createUser,
+    getUserById
 }

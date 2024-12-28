@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, getUser } from "../dataAccess/UserDataAccess.js";
+import { createUser, getUser, getUserById } from "../dataAccess/UserDataAccess.js";
 
 const usersRouter = express.Router();
 
@@ -16,8 +16,14 @@ usersRouter.route('/user')
             res.status(400).json({"message": "Invalid user object"});
         }
         else {
-            res.status(201).json(await createUser(req.body, false))
+            res.status(201).json(await createUser(req.body))
         }
+    });
+
+usersRouter.route('/user/:user_id')
+    .get(async (req, res) => { 
+        const id = req.params.user_id;
+        res.status(200).json(await getUserById(id));
     });
 
 export default usersRouter;
