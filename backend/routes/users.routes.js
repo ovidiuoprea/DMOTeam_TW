@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, getUser, getUserById, updateUser } from "../dataAccess/UserDataAccess.js";
+import { createUser, deleteUser, getUser, getUserById, updateUser } from "../dataAccess/UserDataAccess.js";
 
 const usersRouter = express.Router();
 
@@ -43,6 +43,22 @@ usersRouter.route('/user/:user_id')
         else {
             res.status(200).json(result.object);
         }
+    });
+
+usersRouter.route('/user/:user_id')
+    .delete(async (req, res) => { 
+        const user_id = req.params.user_id;
+        
+        let result = await deleteUser(user_id);
+
+        if(result.error) {
+            res.status(400).json(result.message);
+        }
+        else {
+            res.status(200).json(result.object);
+        }
+
     })
+
 
 export default usersRouter;

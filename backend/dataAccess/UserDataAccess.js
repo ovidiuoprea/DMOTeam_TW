@@ -97,9 +97,31 @@ async function updateUser(id, updatedUserData, ORM=true) {
     }
 }
 
+async function deleteUser (id, ORM = true) { 
+    let deleteEntity = await getUserById(id);
+    if(!deleteEntity) { 
+        return {error: true, message: "No user found"};
+    }
+
+    if(!ORM) { 
+        try {
+            const sql = "DELETE FROM Users WHERE user_id = ?";
+            const [rows] = await conn.query(sql, id);
+            return {error: false, message: "User successfully deleted", object: deleteEntity}
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+    else {
+        return {error: false, message: "User successfully deleted", object: await deleteEntity.destroy()};
+    }
+}
+
 export {
     getUser,
     createUser,
     getUserById,
-    updateUser
+    updateUser,
+    deleteUser
 }
