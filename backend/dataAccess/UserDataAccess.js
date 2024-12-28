@@ -41,7 +41,7 @@ async function createUser(user, ORM = true) {
 }
 
 /**
- * @route GET /user-api/:user_id;
+ * @route GET /user-api/user/:user_id;
  * @param {type: Number} id Requested user's user_id
  * @param {type: Boolean} ORM true = use Sequelize ORM, false = use MySQL pool 
  * @returns User with specified user_id
@@ -55,7 +55,7 @@ async function getUserById(user_id, ORM = true) {
         if(rows.length == 0) {
             return null;
         }
-        
+
         return rows;
     }
     else {
@@ -63,8 +63,43 @@ async function getUserById(user_id, ORM = true) {
     }
 }
 
+/**
+ * @route PUT /user-api/user/:user_id with body
+ * @param {*} id Updated user's user_id
+ * @param {*} updatedUserData New user data for updated user
+ * @param {*} ORM true = use Sequelize ORM, false = use MySQL pool 
+ * @returns {error: boolean, message: "", object: updated user data in JSON format}
+ */
+
+async function updateUser(id, updatedUserData, ORM=true) {
+
+    if(parseInt(id) !== updatedUserData.user_id) {
+        return {error: true, message: "Provided user_id does not match user!"}
+    }
+
+    let existingUser = await getUserById(id);
+    if(!existingUser) {
+        return {error: true, message: "User with user_id not found"};
+    }
+
+    if(!ORM) { 
+        try{ 
+            const sql = "UPDATE Users SET ? WHERE user_id = ?";
+            const [rows] = await conn.query(sql, updatedUserData, id);
+            return {error: false, message: "User successfully updated", object: [...updatedUserData]}
+        }
+        catch(error) { 
+            console.error(error);
+        } 
+    }
+    else {
+        return {error: false, message: "User successfuly updated", object: await existingUser.update(updatedUserData)};
+    }
+}
+
 export {
     getUser,
     createUser,
-    getUserById
+    getUserById,
+    updateUser
 }
