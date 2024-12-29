@@ -1,10 +1,13 @@
 import express from "express";
-import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser } from "../dataAccess/UserDataAccess.js";
+import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser,getReviewerUsers } from "../dataAccess/UserDataAccess.js";
 
 const usersRouter = express.Router();
 
 usersRouter.route('/user')
     .get(async (req, res) => { res.status(200).json(await getUser())});
+
+usersRouter.route('/userreviewer')
+    .get(async (req,res)=>{ res.status(200).json (await getReviewerUsers())})
 
 usersRouter.route('/user')
     .post(async (req, res) => { 

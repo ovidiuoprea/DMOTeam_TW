@@ -19,6 +19,21 @@ async function getUser(ORM = true) {
     }
 }
 
+async function getReviewerUsers(ORM = true) {
+    if (!ORM) {
+        const sql = "SELECT * FROM Users WHERE role = 'Reviewer'"; 
+        const [rows] = await conn.query(sql);
+        return rows;
+    } else {
+        console.log("With ORM:");
+        return await User.findAll({
+            where: {
+                role: 'Reviewer' 
+            }
+        });
+    }
+}
+
 /**
  * Use JSON.stringify() in React to provide consistent data.
  * @route POST /user-api/user with body
@@ -161,5 +176,6 @@ export {
     updateUser,
     deleteUser,
     login,
-    getUserByEmail
+    getUserByEmail,
+    getReviewerUsers
 }
