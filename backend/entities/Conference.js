@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import dbORM from "../dbORMConfig.js";
+import User from "../entities/User.js"
 
 const Conference = dbORM.define("Conferences", {
     conference_id: {
@@ -13,5 +14,8 @@ const Conference = dbORM.define("Conferences", {
         allowNull: false,
     }
 })
+
+User.hasMany(Conference, {as: "Conferences", foreignKey: "organizer_id"});
+Conference.belongsTo(User, {as: "Organizer", foreignKey: "organizer_id"})
 
 export default Conference;

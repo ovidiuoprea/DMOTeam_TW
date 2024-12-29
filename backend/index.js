@@ -5,6 +5,7 @@ import cors from 'cors'
 
 import usersRouter from './routes/users.routes.js';
 import conferencesRouter from './routes/conferences.routes.js';
+import conference_authorRouter from './routes/conference_authors.routes.js';
 
 
 const app = express();
@@ -31,3 +32,4 @@ app.get("/", (req, res, next) => {
 
 app.use("/user-api", usersRouter);
 app.use("/conference-api", conferencesRouter);
+app.use("/conference-author-api", conference_authorRouter);
