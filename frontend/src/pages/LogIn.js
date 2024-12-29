@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { login, getCurrentAuthenticatedUser } from '../services/userService';
+import { login, getCurrentAuthenticatedUser, updateLocalStorage } from '../services/userService';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -26,16 +26,7 @@ const Login = () => {
         }
 
         if(logged_in_user) {
-            let currentDate = new Date();
-            const expiryDate = new Date(currentDate);
-            expiryDate.setHours(currentDate.getHours() + EXPIRY_TIME_HOURS);
-
-            const authData = {
-                user: logged_in_user,
-                expiresAt: expiryDate.toISOString()
-            }
-
-            localStorage.setItem("authData", JSON.stringify(authData));
+            updateLocalStorage(logged_in_user, 3);
         }
 
         setTimeout(()=>{

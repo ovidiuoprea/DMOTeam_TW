@@ -1,65 +1,119 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { getCurrentAuthenticatedUser, signUp, updateLocalStorage } from '../services/userService';
 
 const SignUp = () => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
+
+    const onSignupFormSubmit = async (event) => { 
+        event.preventDefault();
+
+        if(name !== '' && email !== '' && password !== '' && role !== '') {
+            const response = await signUp(name, email, password, role);
+
+            if(response.data){
+                updateLocalStorage(response.data, 3);
+            }
+
+            setTimeout(()=>{
+                const user = getCurrentAuthenticatedUser();
+                if(user) {
+                    console.log("Currently authenticated user, after register: ");
+                    console.log(user);
+                }
+            }, 2000)
+        }
+    }
+
   return (
     <div className='h-screen w-screen flex items-center justify-center '>
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      <h1 class="text-2xl font-bold text-gray-700 text-center mb-6">Sign up</h1>
-      <form action="#" method="POST">
-      <div class="mb-4">
-          <label for="username" class="block text-sm font-medium text-gray-600 mb-1">Username</label>
+    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <h1 className="text-2xl font-bold text-gray-700 text-center mb-6">Sign up</h1>
+      <form onSubmit={onSignupFormSubmit}>
+      <div className="mb-4">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1">Nume</label>
           <input 
             type="text" 
             id="username" 
             name="username" 
-            placeholder="Enter your username" 
-            required 
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Introduceti numele" 
+            defaultValue={name}
+            onChange={(event) => {setName(event.target.value)}}
+            required
+             
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1">Email</label>
           <input 
             type="email" 
             id="email" 
             name="email" 
-            placeholder="Enter your email" 
+            placeholder="Introduceti email-ul" 
+            defaultValue={email}
+            onChange={(event) => {setEmail(event.target.value)}}
             required 
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <div class="mb-4">
-          <label for="password" class="block text-sm font-medium text-gray-600 mb-1">Password</label>
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1">Parola</label>
           <input 
             type="password" 
             id="password" 
             name="password" 
-            placeholder="Enter your password" 
+            defaultValue={password}
+            onChange={(event) => {setPassword(event.target.value)}}
+            placeholder="Introduceti parola" 
             required 
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <div class="mb-6">
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-600 mb-1">Confirm password</label>
+        <div className="mb-4">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600 mb-1">Confirmati parola</label>
           <input 
-            type="confirmPassword" 
+            type="password" 
             id="confirmPassword" 
             name="confirmPassword" 
-            placeholder="Enter your password again" 
+            placeholder="Introduceti parola din nou" 
             required 
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="role" className="block text-sm font-medium text-gray-600 mb-1">Rol</label>
+          <select className="w-full text-sm font-medium text-gray-600 mb-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            id="role"
+            defaultValue={role}
+            onChange={(event) => {setRole(event.target.value)}}
+            name="role"
+            required>
+                <option className="block text-sm font-medium text-gray-600 mb-1">Organizator</option>
+                <option className="block text-sm font-medium text-gray-600 mb-1">Reviewer</option>
+                <option className="block text-sm font-medium text-gray-600 mb-1">Autor</option>
+          </select>
+          {/* <input 
+            type="text" 
+            id="role" 
+            name="role" 
+            placeholder="Enter your password" 
+            required 
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          /> */}
         </div>
         <button 
           type="submit" 
-          class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
         >
           Login
         </button>
       </form>
-      <p class="text-sm text-gray-600 text-center mt-4">
+      <p className="text-sm text-gray-600 text-center mt-4">
         Already have an account? 
-        <a href="/login" class="text-blue-500 hover:underline">Log in</a>
+        <a href="/login" className="text-blue-500 hover:underline">Log in</a>
       </p>
     </div>
   </div>
