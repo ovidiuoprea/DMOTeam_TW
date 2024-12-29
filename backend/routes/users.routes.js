@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, deleteUser, getUser, getUserById, login, updateUser } from "../dataAccess/UserDataAccess.js";
+import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser } from "../dataAccess/UserDataAccess.js";
 
 const usersRouter = express.Router();
 
@@ -74,6 +74,23 @@ usersRouter.route('/login')
         }
         else {
             return res.status(200).json({message: result.message, user: result.object})
+        }
+    })
+
+usersRouter.route('/userEmail/:email')
+    .get(async (req, res) => { 
+        const email = req.params.email;
+
+        if(!email) {
+            return res.status(400).json({"message": "Invalid request"});
+        }
+        const result = await getUserByEmail(email);
+
+        if(result.error) {
+            return res.status(400).json(result.message);
+        }
+        else {
+            return res.status(200).json({message: result.message, user: result.object});
         }
     })
 

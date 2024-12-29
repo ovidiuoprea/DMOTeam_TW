@@ -120,16 +120,16 @@ async function deleteUser (id, ORM = true) {
 
 /**
  * @route POST /user-api/user with body
- * @param {*} email 
+ * @param {*} provided_email 
  * @param {*} password 
  * @returns { error: boolean, message: "", object: user || null}
  */
-async function login (email, password, ORM = true) { 
+async function login (provided_email, password, ORM = true) { 
     if(!ORM){
         //TODO: Login without ORM
     }
     else {
-        const user = await User.findOne({where: {email: email}});
+        const user = await User.findOne({where: {email: provided_email}});
         if(!user) { 
             return {error: true, message: "User not found", object: null}
         }
@@ -140,11 +140,26 @@ async function login (email, password, ORM = true) {
     }
 }
 
+async function getUserByEmail (provided_email, ORM = true ) { 
+    if(!ORM) {
+
+    }
+    else{
+        const user = await User.findOne({where: {email: provided_email}});
+        if(!user) { 
+            return {error: true, message: "User not found", object: null}
+        }
+
+        return {error: false, message: "Found user", object: user};
+    }
+} 
+
 export {
     getUser,
     createUser,
     getUserById,
     updateUser,
     deleteUser,
-    login
+    login,
+    getUserByEmail
 }
