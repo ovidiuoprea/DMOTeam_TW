@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import { getUser } from './dataAccess/UserDataAccess.js';
 
 import usersRouter from './routes/users.routes.js';
+import conferencesRouter from './routes/conferences.routes.js';
+
 
 const app = express();
 dotenv.config();
@@ -21,3 +23,4 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/user-api", usersRouter);
+app.use("/conference-api", conferencesRouter);
