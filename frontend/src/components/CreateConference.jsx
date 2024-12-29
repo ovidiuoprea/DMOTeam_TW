@@ -73,7 +73,7 @@ const CreateConference = () => {
               {reviewers.map((r) => (
                 <div
                   key={r.user_id}
-                  onClick={() => handleSelectReviewer(r.user_id)} // Adaugă handler-ul de click
+                  onClick={() => handleSelectReviewer(r.user_id)}
                   className={`p-4 mb-4 cursor-pointer rounded-lg transition-colors ${
                     selectedReviewers.includes(r.user_id) ? "bg-green-500 text-white" : "bg-gray-100"
                   }`}
