@@ -35,6 +35,9 @@ export const getUserAuthStatus = () => {
     const authData = JSON.parse(localStorage.getItem("authData"));
 
     const currentTime = new Date();
+    if(!authData) {
+        return false;
+    }
     if(currentTime.toISOString() > authData.expiresAt) { 
         return false;
     }
