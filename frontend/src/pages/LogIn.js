@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { login, getUserAuthStatus, getCurrentAuthenticatedUser } from '../services/userService';
+import { login, getCurrentAuthenticatedUser } from '../services/userService';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginStatusMessage, setLoginStatusMessage]=useState("");
 
     const EXPIRY_TIME_HOURS = 3;
 
@@ -17,6 +18,10 @@ const Login = () => {
             
             if(response.data){
                 logged_in_user = response.data.user;
+                setLoginStatusMessage("Login successful!")
+            }
+            else {
+                setLoginStatusMessage("User/password combo failed!");
             }
         }
 
@@ -81,8 +86,13 @@ const Login = () => {
         </button>
       </form>
       <p className="text-sm text-gray-600 text-center mt-4">
-        Don't have an account? 
-        <a href="/signup" className="text-blue-500 hover:underline">Sign up</a>
+        Don't have an account?
+        <a href="/signup" className="text-blue-500 hover:underline" style={{marginLeft: 2 + "px"}}>Sign up</a>
+      </p>
+      <p 
+        style={{marginTop: 24 + 'px'}}
+        className={`text-md text-center login__fail-message ${loginStatusMessage !== "Login successful!" ? "text-red-700" : "text-green-700"}`} >
+        {loginStatusMessage !== "" ? `${loginStatusMessage}` : ""}
       </p>
     </div>
   </div>

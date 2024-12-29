@@ -4,6 +4,7 @@ export const login = async (email, password) => {
     
     const url = API_URL + "/login"
 
+    //TODO: @Ovidiu FIX cors overriding RESTful error messages.
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -23,7 +24,6 @@ export const login = async (email, password) => {
         return {success: true, data}
     }
     catch (error) { 
-        console.error("Login error: ", error.message);
         return {success: false, error: error.message}
     }
 }
@@ -59,4 +59,16 @@ export const getCurrentAuthenticatedUser = () => {
     else {
         return null;
     }
+}
+
+export const logout = () => { 
+    let currentDate = new Date();
+    const expiryDate = new Date(currentDate);
+    expiryDate.setHours(currentDate.getHours() - 1);
+
+    const authData = {
+        user: null,
+        expiresAt: expiryDate
+    }
+    localStorage.setItem("authData",JSON.stringify(authData));
 }
