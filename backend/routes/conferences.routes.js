@@ -1,5 +1,5 @@
 import express from "express";
-import { createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, updateConference } from "../dataAccess/ConferenceDataAcces.js";
+import { createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, updateConference } from "../dataAccess/ConferenceDataAccess.js";
 
 const conferencesRouter = express.Router();
 
