@@ -25,8 +25,35 @@ async function getReviews(ORM=true) {
   }
 }
 
+async function createReview(review, ORM=true) {
+    if(!ORM) {
+        const sql = "INSERT INTO Reviews SET ?";
+        const [result] = await conn.query(sql, review);
+        return {review_id: result.insertId, ...review}
+    }
+    else {
+        return await Review.create(review);
+    }
+}
+
+async function getReviewById(review_id, ORM=true) {
+    if(!ORM) {
+        const sql = "SELECT * FROM Reviews WHERE review_id = ?";
+        const [rows] = await conn.query(sql, review_id);
+
+        if(rows.length == 0) {
+            return null;
+        }
+        return rows;
+    }
+    else {
+        return await Review.findByPk(review_id);
+    }
+}
 
 export {
   associationsTest,
   getReviews,
+  createReview,
+  getReviewById
 }
