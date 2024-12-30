@@ -36,8 +36,8 @@ const AutorUI = ({user}) => {
           </div>
         </div>
         <div className=''>
-          {activePage===1 && <ShowAllConferences user={user}/>}
-          {activePage===2 && <ShowRegisteresConferences user={user} />}
+          {activePage===AVAILABLE_CONFERENCES_PAGE && <ShowAllConferences user={user}/>}
+          {activePage===REGISTERED_CONFERENCES_PAGE && <ShowRegisteresConferences user={user} />}
         </div>
       </div>
     </div>

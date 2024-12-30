@@ -34,8 +34,8 @@ const OrganizatorUI = ({user}) => {
           </div>
         </div>
         <div className=''>
-          {activePage===1 && <CreateConference user={user}/>}
-          {activePage===2 && <ShowAllArticles/>}
+          {activePage===CREATE_CONFERENCE_PAGE && <CreateConference user={user}/>}
+          {activePage===SHOW_ALL_ARTICLES_PAGE && <ShowAllArticles/>}
         </div>
       </div>
     </div>
