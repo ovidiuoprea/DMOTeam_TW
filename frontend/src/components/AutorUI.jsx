@@ -16,8 +16,8 @@ const AutorUI = ({user}) => {
       <div className='grid grid-cols-[2fr_4fr] h-full w-full max-lg:grid-cols-1 max-lg:h-fit'>
         <div className='bg-yellow-100 h-full w-full px-8 py-8'>
           <div className='mb-8'>
-            <p className='text-2xl font-bold text-center'>Bine ai venit, <span className='text-blue-800'>{user.name}</span>  !</p>
-            <p className='text-xl text-center'>Rolul tau: <span className='text-xl font-bold text-blue-800'>{user.role}</span></p>
+            <p className='text-2xl font-bold text-center'>Bine ai venit, <span className='text-blue-800'>{user ? user.name : ""}</span>  !</p>
+            <p className='text-xl text-center'>Rolul tau: <span className='text-xl font-bold text-blue-800'>{user ? user.role : ""}</span></p>
           </div>
           <div className='text-lg indent-20'>
             <p>
