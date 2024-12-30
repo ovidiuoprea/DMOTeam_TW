@@ -122,7 +122,6 @@ async function deleteReview (id, ORM = true) {
   }
 }
 
-
 export {
   associationsTest,
   createReview,
