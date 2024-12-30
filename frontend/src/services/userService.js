@@ -107,3 +107,25 @@ export const updateLocalStorage = (user, EXPIRY_TIME_HOURS) => {
     }
     localStorage.setItem("authData", JSON.stringify(authData));
 }
+
+/**
+ * Gets all users with reviewer role
+ * 
+ * @returns all reviewers
+ */
+export const getReviewers=async ()=>{
+    try {
+        const response = await fetch(API_URL + "/userreviewer");
+
+
+        if (!response.ok) {
+            throw new Error("Ceva a mers prost cu fetch-ul");
+        }
+
+        const result = await response.json();
+        return result;
+        } catch (error) {
+        console.error(error.message); 
+        } 
+}
+

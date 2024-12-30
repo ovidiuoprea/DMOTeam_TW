@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button';
+import { createConference } from '../services/conferenceService';
+import { getReviewers } from '../services/userService';
+import { createConferenceReviewer } from '../services/conferenceReviewers';
 
 const CreateConference = ({user}) => {
   const [conferenceName,setConferenceName]=useState("");
   const [conferenceDescripition,setConferenceDescription]=useState("");
 
-  const[reviewers,setReviewers]=useState([]);
-  const [selectedReviewers, setSelectedReviewers] = useState([]); 
+    const[reviewers,setReviewers]=useState([]);
+    const [selectedReviewers, setSelectedReviewers] = useState([]); 
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(process.env.REACT_APP_API_URL + "/user-api/userreviewer");
-
-
-        if (!response.ok) {
-          throw new Error("Ceva a mers prost cu fetch-ul");
-        }
-
-        const result = await response.json();
-        setReviewers(result); 
-      } catch (error) {
-        console.error(error.message); 
-      } 
-    };
-
-    fetchData(); 
-  }, []);
+    useEffect(() => {
+      const fetchReviewers = async () => {
+          const data = await getReviewers();
+          setReviewers(data);
+      };
+    
+      fetchReviewers();
+    }, []);
 
 
   const handleSelectReviewer = (id) => {
@@ -40,31 +32,11 @@ const CreateConference = ({user}) => {
 
   const handleOnSubmit =async (e)=>{
     e.preventDefault();
-    try {
-      console.log(user.user_id)
-      console.log(JSON.stringify({
-        "organizer_id": user.user_id
-      }))
-      const response = await fetch(process.env.REACT_APP_API_URL + "/conference-api/conference",{
-        method:"POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body:JSON.stringify({
-          "organizer_id": user.user_id
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error("Problema la fetch " + response.status);
-      }
-
-      const result= await response.json();
-      console.log(result)
-
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
+    const conferenceId= await createConference(user.user_id);
+    
+    selectedReviewers.map((selectedReviewer)=>{
+      createConferenceReviewer(selectedReviewer,conferenceId)
+    })
   }
 
   return (
