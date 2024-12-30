@@ -12,10 +12,12 @@ const Conference = dbORM.define("Conferences", {
     organizer_id: { 
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+            model: User,
+            key: 'organizer_id'
+        },
+        onDelete: 'CASCADE'
     }
 })
-
-User.hasMany(Conference, {as: "Conferences", foreignKey: "organizer_id"});
-Conference.belongsTo(User, {as: "Organizer", foreignKey: "organizer_id"})
 
 export default Conference;
