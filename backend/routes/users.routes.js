@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser, getUserByRole } from "../dataAccess/UserDataAccess.js";
+import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser, getUserByRole, getArticlesByReviewerID } from "../dataAccess/UserDataAccess.js";
 
 const usersRouter = express.Router();
 
@@ -103,5 +103,15 @@ usersRouter.route('/userEmail/:email')
         }
     })
 
+usersRouter.route('/article-by-reviewer-id/:reviewer_id')
+    .get(async (req, res) => { 
+        const reviewer_id = req.params.reviewer_id;
+        const result = await getArticlesByReviewerID(reviewer_id);
+
+        if(!result) { 
+            return res.status(400).json({message: "Not a reviewer"});
+        }
+        return res.status(200).json({articles: result});
+    })
 
 export default usersRouter;

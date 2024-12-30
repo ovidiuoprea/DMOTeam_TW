@@ -199,6 +199,41 @@ async function getUserByEmail (provided_email, ORM = true ) {
     }
 } 
 
+/**
+ * Get all the articles assigned to user specified by reviewer_id
+ * @route GET /user-api/article-by-reviewer-id/:reviewer_id
+ * @param {*} reviewer_id User_id for whom to get articles for.
+ * @param {*} ORM 
+ * @returns {articles: JSON} Articles assigned to user with user_id = reviewer_id
+ */
+async function getArticlesByReviewerID (reviewer_id, ORM = false) {
+    if(!ORM) {
+        try{
+            const user = await getUserById(reviewer_id);
+            if(!user.role === "Reviewer") {
+                return null;
+            }
+
+            const sql = `
+            SELECT 
+                a.title as article_title, a.content as article_content, a.is_approved as article_is_approved, a.conference_id as article_conference_id, a.author_id as article_author_id
+            FROM Articles a 
+            JOIN Reviews r ON a.article_id = r.article_id 
+            WHERE r.reviewer_id = ?`;
+
+            const [rows] = await conn.query(sql, reviewer_id);
+            return rows;
+           
+        }
+        catch(error) {
+            console.error(error);
+        }
+    }
+    else {
+        //TODO: ORM.
+    }
+}
+
 export {
     getUser,
     createUser,
@@ -208,5 +243,6 @@ export {
     login,
     getUserByEmail,
     getReviewerUsers,
-    getUserByRole
+    getUserByRole,
+    getArticlesByReviewerID
 }
