@@ -12,7 +12,7 @@ const NavBar = () => {
       </div>
       <div className='flex items-center bg-gray-200 rounded-lg px-3 py-1 gap-2 cursor-pointer'>
         <span className="material-symbols-outlined text-[50px] text-gray-700">account_circle</span>
-        <span className='text-grxlay-700 text-'>{user ? user.name : "Log in"}</span>
+        <a className='text-grxlay-700 text-' href="/login">{user ? user.name : "Log in"}</a>
       </div>
         
     </div>
