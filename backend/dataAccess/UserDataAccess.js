@@ -19,6 +19,36 @@ async function getUser(ORM = true) {
     }
 }
 
+
+/**
+ * Get all the users with specified role
+ * @route GET /user-api/user-role/:
+ * @param {*} role 
+ * @param {*} ORM 
+ * @returns Array containing users with the specified role.
+ */
+async function getUserByRole(role, ORM=true) { 
+    if(!ORM) {
+        const sql = "SELECT * FROM Users where role = ?";
+        const [rows] = await conn.query(sql);
+        return rows;
+    }
+    else {
+        return await User.findAll({
+            where: {
+                role: role
+            }
+        })
+    }
+}
+
+
+/**
+ * Get all the users with role="Reviewer"
+ * @route GET /user-api/userreviewer
+ * @param {*} ORM 
+ * @returns All the users with role="Reviewer"
+ */
 async function getReviewerUsers(ORM = true) {
     if (!ORM) {
         const sql = "SELECT * FROM Users WHERE role = 'Reviewer'"; 
@@ -177,5 +207,6 @@ export {
     deleteUser,
     login,
     getUserByEmail,
-    getReviewerUsers
+    getReviewerUsers,
+    getUserByRole
 }
