@@ -187,7 +187,7 @@ async function getAvailableConferences(userId, ORM = true) {
 }
 
 
-async function getConferencesForAuthor(authorId, ORM = false) {
+async function getConferencesForAuthor(authorId, ORM = true) {
     if (!ORM) {
         const sql = `
             SELECT c.*, ca.ca_id
@@ -198,22 +198,27 @@ async function getConferencesForAuthor(authorId, ORM = false) {
         const [rows] = await conn.query(sql, [authorId]);   
         return rows;
     } else {
-        const conferences = await Conference.findAll({
+        const [rows] = await Conference.findAll({
             include: [
                 {
                     model: ConferenceAuthor,
-                    required: true,
-                    where: { author_id: authorId }, 
+                    attributes: ["ca_id"],
+                    where: { author_id: authorId } // Filtrare după `authorId`
                 }
             ]
         });
-
-        //return conferences    --> in cazul asta retruneaza conferintele dar cu tot cu autor
-
-        return conferences.map(conf => ({
-            conference_id: conf.conference_id,
-            organizer_id: conf.organizer_id,
-        }));
+        
+        if(rows){
+            const response = {
+                conference_id: rows.conference_id, 
+                organizer_id:  rows.organizer_id,
+                ca_id: rows.Conference_authors[0].ca_id
+            }
+    
+            return [response];
+        } 
+        
+        return [];
     }
 }
 
