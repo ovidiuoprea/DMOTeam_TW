@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button';
 
-const CreateConference = () => {
+const CreateConference = ({user}) => {
   const [conferenceName,setConferenceName]=useState("");
   const [conferenceDescripition,setConferenceDescription]=useState("");
 
@@ -38,11 +38,40 @@ const CreateConference = () => {
     );
   };
 
+  const handleOnSubmit =async (e)=>{
+    e.preventDefault();
+    try {
+      console.log(user.user_id)
+      console.log(JSON.stringify({
+        "organizer_id": user.user_id
+      }))
+      const response = await fetch(process.env.REACT_APP_API_URL + "/conference-api/conference",{
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          "organizer_id": user.user_id
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error("Problema la fetch " + response.status);
+      }
+
+      const result= await response.json();
+      console.log(result)
+
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  }
+
   return (
     <div className='px-16 py-4'>  
       <p className='text-lg font-bold'>Creeare conferință</p>
 
-      <form>
+      <form onSubmit={handleOnSubmit}>
         <div className="mb-4 mt-4">
             <label htmlFor="conferenceName" className="block text-sm font-medium text-gray-600 mb-1">Numele conferinței</label>
             <input 
@@ -87,7 +116,8 @@ const CreateConference = () => {
         <div className='flex justify-center mt-8'>
           <button 
             type="submit"
-            className="w-fit px-8 bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className={`w-fit px-8 text-white py-2 rounded-lg  ${selectedReviewers.length < 2 ? "bg-gray-700 " : "bg-blue-800 hover:bg-blue-600 transition-colors"}`}
+            disabled={selectedReviewers.length<2}            
           >
             Salvare conferință
           </button>

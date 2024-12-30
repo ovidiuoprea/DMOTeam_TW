@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from './Button'
 import CreateConference from './CreateConference'
+import ShowAllArticles from './ShowAllArticles'
 
 const OrganizatorUI = ({user}) => {
+  const [activePage,setActivePage]=useState();
+
+
+  const handleButtonClick = (page) => {
+    setActivePage(page);
+  };
   return (
     <div className=' pt-[80px] h-full w-full'>
       <div className='grid grid-cols-[2fr_4fr] h-full w-full max-lg:grid-cols-1 max-lg:h-fit'>
@@ -20,12 +27,13 @@ const OrganizatorUI = ({user}) => {
             </p>
           </div>
           <div className='justify-center flex flex-col gap-4 px-16 mt-10'>
-            <Button text={"Creează o noua conferință"}/>
-            <Button text={"Starea articolelor"}/>
+            <Button text={"Creează o nouă conferință"} onClick={() => setActivePage(1)} />
+            <Button text={"Starea articolelor"} onClick={() => setActivePage(2)} />
           </div>
         </div>
         <div className=''>
-          <CreateConference />
+          {activePage===1 && <CreateConference user={user}/>}
+          {activePage===2 && <ShowAllArticles/>}
         </div>
       </div>
     </div>
