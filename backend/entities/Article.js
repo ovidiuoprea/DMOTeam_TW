@@ -37,6 +37,7 @@ const Article = dbORM.define("Articles",{
       model: ConferenceAuthor,  
       key: 'author_id', 
     },
+    onDelete: 'CASCADE',
   }
 })
 

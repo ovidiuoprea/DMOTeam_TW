@@ -10,9 +10,9 @@ const HomePage = () => {
   return (
     <div className='h-screen w-full '>
       <NavBar/> 
-      {user.role==="Organizer" && <OrganizatorUI user={user} />}
-      {user.role==="Author" && <AutorUI user={user} />}
-        
+      {/* {user.role==="Organizer" && <OrganizatorUI user={user} />}
+      {user.role==="Author" && <AutorUI user={user} />} */}
+      <AutorUI user={user} />  
     </div>
   )
 }

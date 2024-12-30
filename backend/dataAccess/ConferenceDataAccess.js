@@ -187,10 +187,10 @@ async function getAvailableConferences(userId, ORM = true) {
 }
 
 
-async function getConferencesForAuthor(authorId, ORM = true) {
+async function getConferencesForAuthor(authorId, ORM = false) {
     if (!ORM) {
         const sql = `
-            SELECT c.* 
+            SELECT c.*, ca.ca_id
             FROM Conferences c
             INNER JOIN Conference_authors ca ON c.conference_id = ca.conference_id
             WHERE ca.author_id = ?;
