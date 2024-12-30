@@ -209,18 +209,13 @@ async function getConferencesForAuthor(authorId, ORM = true) {
             ]
         });
         
-        if(rows){
-
-            return rows.map(conf => ({
-                conference_id: conf.conference_id, 
-                organizer_id:  conf.organizer_id,
-                name: conf.name,
-                description: conf.description,
-                ca_id: conf.Conference_authors[0].ca_id
-            })); 
-        } 
-        
-        return [];
+        return rows.map(conf => ({
+            conference_id: conf.conference_id, 
+            organizer_id:  conf.organizer_id,
+            name: conf.name,
+            description: conf.description,
+            ca_id: conf.Conference_authors[0].ca_id
+        })); 
     }
 }
 
