@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import dbORM from "../dbORMConfig.js";
-import User from "./User.js";
 import Conference from "./Conference.js";
+import ConferenceAuthor from "./ConferenceAuthor.js";
 
 const Article = dbORM.define("Articles",{
   article_id:{
@@ -34,8 +34,8 @@ const Article = dbORM.define("Articles",{
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
-      model: User,  
-      key: 'user_id', 
+      model: ConferenceAuthor,  
+      key: 'author_id', 
     },
   }
 })

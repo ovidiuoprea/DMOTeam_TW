@@ -2,13 +2,14 @@ import ConferenceAuthor from "../entities/ConferenceAuthor.js";
 import conn from "../dbConfig.js";
 import Conference from "../entities/Conference.js";
 import Article from "../entities/Article.js";
+import User from "../entities/User.js";
 
 async function associationsTest() {
     return ConferenceAuthor.findOne({
         where: {ca_id: 1},
         include: [
-            { model: Article, attributes: ["author_id"]},
-            { model: Conference, attributes: ["conference_id"]}
+            { model: Conference, attributes: ["conference_id"]},
+            { model: User, attributes: ["name"]}
         ]
     })
 }
