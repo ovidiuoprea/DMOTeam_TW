@@ -1,5 +1,17 @@
 import Conference from "../entities/Conference.js";
 import conn from "../dbConfig.js";
+import User from "../entities/User.js";
+
+
+async function associationsTest() {
+    return Conference.findOne({
+        where: {conference_id: 1},
+        include: [
+            { model: User, attributes: ["name"]}
+        ]
+    })
+}
+
 
 /**
  * If ORM fails, call this as getConference(false), as it will switch to the default MySQL promise-based pool
@@ -139,6 +151,7 @@ async function getConferencesByOrganizerId (provided_organizer_id, ORM = true ) 
 } 
 
 export {
+    associationsTest,
     getConference,
     createConference,
     getConferenceById,

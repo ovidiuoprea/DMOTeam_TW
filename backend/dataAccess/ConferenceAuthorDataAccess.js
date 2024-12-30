@@ -1,5 +1,17 @@
 import ConferenceAuthor from "../entities/ConferenceAuthor.js";
 import conn from "../dbConfig.js";
+import Conference from "../entities/Conference.js";
+import Article from "../entities/Article.js";
+
+async function associationsTest() {
+    return ConferenceAuthor.findOne({
+        where: {ca_id: 1},
+        include: [
+            { model: Article, attributes: ["author_id"]},
+            { model: Conference, attributes: ["conference_id"]}
+        ]
+    })
+}
 
 /**
  * If ORM fails, call this as getConferenceAuthor(false), as it will switch to the default MySQL promise-based pool
@@ -139,6 +151,7 @@ async function getAuthorsByConference (provided_conference_id, ORM = true ) {
 } 
 
 export {
+    associationsTest,
     getConferenceAuthor,
     createConferenceAuthor,
     getConferenceAuthorById,

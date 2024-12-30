@@ -5,10 +5,11 @@ import cors from 'cors'
 
 import usersRouter from './routes/users.routes.js';
 import conferencesRouter from './routes/conferences.routes.js';
-import conference_authorRouter from './routes/conference_authors.routes.js';
+import conferenceAuthorRouter from './routes/conferenceAuthors.routes.js';
 import conferenceReviewersRouter from './routes/conferenceReviewers.routes.js';
 import Associations from './entities/Associations.js';
 import articlesRouter from './routes/articles.routes.js';
+import reviewsRouter from './routes/reviews.routes.js';
 
 
 const app = express();
@@ -37,6 +38,7 @@ Associations();
 
 app.use("/user-api", usersRouter);
 app.use("/conference-api", conferencesRouter);
-app.use("/conference-author-api", conference_authorRouter);
+app.use("/conference-author-api", conferenceAuthorRouter);
 app.use("/conference-reviewer-api", conferenceReviewersRouter);
 app.use("/article-api", articlesRouter);
+app.use("/review-api/", reviewsRouter);
