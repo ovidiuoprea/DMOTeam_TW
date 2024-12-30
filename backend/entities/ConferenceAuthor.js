@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import dbORM from "../dbORMConfig.js";
 import Conference from "./Conference.js"
-import Article from "./Article.js";
+import User from "./User.js";
 
 const ConferenceAuthor = dbORM.define("Conference_authors", {
     ca_id: {
@@ -23,7 +23,7 @@ const ConferenceAuthor = dbORM.define("Conference_authors", {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: Article,  
+            model: User,  
             key: 'author_id', 
         },
         onDelete: 'CASCADE'

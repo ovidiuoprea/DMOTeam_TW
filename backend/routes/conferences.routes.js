@@ -1,7 +1,10 @@
 import express from "express";
-import { createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, getConferencesForAuthor, updateConference, getAvailableConferences } from "../dataAccess/ConferenceDataAccess.js";
+import { associationsTest, createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, updateConference,getConferencesForAuthor,getAvailableConferences} from "../dataAccess/ConferenceDataAccess.js";
 
 const conferencesRouter = express.Router();
+
+conferencesRouter.route('/associations-test')
+    .get(async (req, res) => { res.status(200).json(await associationsTest())});
 
 conferencesRouter.route('/conference')
     .get(async (req, res) => { res.status(200).json(await getConference())});

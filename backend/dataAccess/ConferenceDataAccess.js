@@ -2,6 +2,18 @@ import Conference from "../entities/Conference.js";
 import ConferenceAuthor from "../entities/ConferenceAuthor.js"
 import conn from "../dbConfig.js";
 import { Sequelize } from "sequelize";
+import User from "../entities/User.js";
+
+
+async function associationsTest() {
+    return Conference.findOne({
+        where: {conference_id: 1},
+        include: [
+            { model: User, attributes: ["name"]}
+        ]
+    })
+}
+
 
 /**
  * If ORM fails, call this as getConference(false), as it will switch to the default MySQL promise-based pool
@@ -206,6 +218,7 @@ async function getConferencesForAuthor(authorId, ORM = true) {
 }
 
 export {
+    associationsTest,
     getConference,
     createConference,
     getConferenceById,
