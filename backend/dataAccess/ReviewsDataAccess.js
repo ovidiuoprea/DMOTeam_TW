@@ -36,8 +36,24 @@ async function createReview(review, ORM=true) {
     }
 }
 
+async function getReviewById(review_id, ORM=true) {
+    if(!ORM) {
+        const sql = "SELECT * FROM Reviews WHERE review_id = ?";
+        const [rows] = await conn.query(sql, review_id);
+
+        if(rows.length == 0) {
+            return null;
+        }
+        return rows;
+    }
+    else {
+        return await Review.findByPk(review_id);
+    }
+}
+
 export {
   associationsTest,
   getReviews,
-  createReview
+  createReview,
+  getReviewById
 }

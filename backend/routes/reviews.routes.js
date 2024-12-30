@@ -1,5 +1,5 @@
 import express from "express";
-import { getReviews, associationsTest, createReview } from "../dataAccess/ReviewsDataAccess.js"
+import { getReviews, associationsTest, createReview, getReviewById } from "../dataAccess/ReviewsDataAccess.js"
 
 
 const reviewsRouter = express.Router();
@@ -24,5 +24,10 @@ reviewsRouter.route('/review')
         }
     })
 
+reviewsRouter.route('/review/:review_id')
+    .get(async (req, res) => { 
+        const review_id = req.params.review_id;
+        res.status(200).json(await getReviewById(review_id));
+    })
 
 export default reviewsRouter
