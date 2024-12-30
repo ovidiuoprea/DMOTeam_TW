@@ -9,6 +9,8 @@ conferencesRouter.route('/conference')
 conferencesRouter.route('/conference')
     .post(async (req, res) => { 
         const conference = req.body;
+        console.log("Received conference data:", req.body);
+
         if(!conference || Object.keys(conference).length == 0) {
             return res.status(400).json({"message": "Invalid request"});
         }
