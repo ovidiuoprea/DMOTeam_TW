@@ -105,10 +105,5 @@ export const updateLocalStorage = (user, EXPIRY_TIME_HOURS) => {
         user: user,
         expiresAt: expiryDate.toISOString()
     }
-
-    console.log(authData);
-
     localStorage.setItem("authData", JSON.stringify(authData));
-
-    console.log(localStorage.getItem("authData").user);
 }
