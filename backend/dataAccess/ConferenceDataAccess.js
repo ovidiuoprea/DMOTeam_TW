@@ -198,24 +198,26 @@ async function getConferencesForAuthor(authorId, ORM = true) {
         const [rows] = await conn.query(sql, [authorId]);   
         return rows;
     } else {
-        const [rows] = await Conference.findAll({
+        const rows = await Conference.findAll({
             include: [
                 {
                     model: ConferenceAuthor,
+                    required: true,   
                     attributes: ["ca_id"],
-                    where: { author_id: authorId } // Filtrare după `authorId`
+                    where: { author_id: authorId } 
                 }
             ]
         });
         
         if(rows){
-            const response = {
-                conference_id: rows.conference_id, 
-                organizer_id:  rows.organizer_id,
-                ca_id: rows.Conference_authors[0].ca_id
-            }
-    
-            return [response];
+
+            return rows.map(conf => ({
+                conference_id: conf.conference_id, 
+                organizer_id:  conf.organizer_id,
+                name: conf.name,
+                description: conf.description,
+                ca_id: conf.Conference_authors[0].ca_id
+            })); 
         } 
         
         return [];
