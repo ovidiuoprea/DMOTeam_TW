@@ -47,7 +47,8 @@ const Associations = () => {
 
     Article.belongsTo(ConferenceAuthor, {
         foreignKey: "author_id",
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        hooks: true
     });
     ConferenceAuthor.hasMany(Article, {
         foreignKey: "author_id"
