@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Button from './Button'
 import ShowAllArticles from './ShowAllArticles'
 import ShowAllConferences from './ShowAllConferences'
+import ShowRegisteresConferences from './ShowRegisteresConferences'
 
 const AutorUI = ({user}) => {
     const [activePage,setActivePage]=useState();
@@ -28,12 +29,12 @@ const AutorUI = ({user}) => {
           </div>
           <div className='justify-center flex flex-col gap-4 px-16 mt-10'>
             <Button text={"Vezi conferințele disponibile"} onClick={() => setActivePage(1)} />
-            <Button text={" ..... "} onClick={() => setActivePage(2)} />
+            <Button text={"Conferinte la care sunt inscris "} onClick={() => setActivePage(2)} />
           </div>
         </div>
         <div className=''>
-          {activePage===1 && <ShowAllConferences />}
-          {activePage===2 && ""}
+          {activePage===1 && <ShowAllConferences user={user}/>}
+          {activePage===2 && <ShowRegisteresConferences user={user} />}
         </div>
       </div>
     </div>

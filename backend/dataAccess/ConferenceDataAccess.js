@@ -1,5 +1,7 @@
 import Conference from "../entities/Conference.js";
+import ConferenceAuthor from "../entities/ConferenceAuthor.js"
 import conn from "../dbConfig.js";
+import { Sequelize } from "sequelize";
 
 /**
  * If ORM fails, call this as getConference(false), as it will switch to the default MySQL promise-based pool
@@ -138,11 +140,78 @@ async function getConferencesByOrganizerId (provided_organizer_id, ORM = true ) 
     }
 } 
 
+async function getAvailableConferences(userId, ORM = true) {
+    if (!ORM) {
+        const sql = `
+            SELECT c.* 
+            FROM Conferences c
+            WHERE c.conference_id NOT IN (
+                SELECT ca.conference_id 
+                FROM Conference_authors ca 
+                WHERE ca.author_id = ?
+            );
+        `;
+        const [rows] = await conn.query(sql, [userId]);
+        return rows;
+    } else {
+        const conferences = await Conference.findAll({
+            where: {
+                conference_id: {
+                    [Sequelize.Op.notIn]: Sequelize.literal(`
+                        (SELECT ca.conference_id 
+                        FROM Conference_authors ca 
+                        WHERE ca.author_id = ${userId})
+                    `),
+                },
+            },
+        });
+
+        // Returnează doar câmpurile relevante
+        return conferences.map(conf => ({
+            conference_id: conf.conference_id,
+            organizer_id: conf.organizer_id,
+        }));
+    }
+}
+
+
+async function getConferencesForAuthor(authorId, ORM = true) {
+    if (!ORM) {
+        const sql = `
+            SELECT c.* 
+            FROM Conferences c
+            INNER JOIN Conference_authors ca ON c.conference_id = ca.conference_id
+            WHERE ca.author_id = ?;
+        `;
+        const [rows] = await conn.query(sql, [authorId]);   
+        return rows;
+    } else {
+        const conferences = await Conference.findAll({
+            include: [
+                {
+                    model: ConferenceAuthor,
+                    required: true,
+                    where: { author_id: authorId }, 
+                }
+            ]
+        });
+
+        //return conferences    --> in cazul asta retruneaza conferintele dar cu tot cu autor
+
+        return conferences.map(conf => ({
+            conference_id: conf.conference_id,
+            organizer_id: conf.organizer_id,
+        }));
+    }
+}
+
 export {
     getConference,
     createConference,
     getConferenceById,
     updateConference,
     deleteConference,
-    getConferencesByOrganizerId
+    getConferencesByOrganizerId,
+    getConferencesForAuthor,
+    getAvailableConferences,
 }

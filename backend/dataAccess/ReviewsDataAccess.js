@@ -10,7 +10,7 @@ async function getReviews(ORM=true) {
     return rows;
   }
   else {
-      return await Review.findAll();
+    return await Review.findAll();
   }
 }
 

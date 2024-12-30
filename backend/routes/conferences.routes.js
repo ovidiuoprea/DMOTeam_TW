@@ -1,10 +1,16 @@
 import express from "express";
-import { createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, updateConference } from "../dataAccess/ConferenceDataAccess.js";
+import { createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, getConferencesForAuthor, updateConference, getAvailableConferences } from "../dataAccess/ConferenceDataAccess.js";
 
 const conferencesRouter = express.Router();
 
 conferencesRouter.route('/conference')
     .get(async (req, res) => { res.status(200).json(await getConference())});
+
+conferencesRouter.route('/available-conferences/:userId')
+    .get(async (req,res)=>{
+        const userId = req.params.userId;
+        res.status(200).json(await getAvailableConferences(userId))
+    });
 
 conferencesRouter.route('/conference')
     .post(async (req, res) => { 
@@ -59,8 +65,7 @@ conferencesRouter.route('/conference/:conference_id')
         else {
             res.status(200).json(result.object);
         }
-
-    })
+    });
 
 conferencesRouter.route('/conference/organizer/:organizer_id')
     .get(async (req, res) => { 
@@ -77,6 +82,18 @@ conferencesRouter.route('/conference/organizer/:organizer_id')
         else {
             return res.status(200).json({message: result.message, conference: result.object});
         }
+    })
+
+conferencesRouter.route('/conference/author/:author_id')
+    .get(async(req,res)=>{
+        const author_id= req.params.author_id
+
+        if(!author_id){
+            return res.status(400).json({"message": "Invalid request"});
+        }
+        const result= await getConferencesForAuthor(author_id);
+        
+        return res.status(200).json(result);
     })
 
 

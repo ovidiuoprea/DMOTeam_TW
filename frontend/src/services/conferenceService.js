@@ -22,3 +22,18 @@ export const createConference= async (user_id)=>{
     console.error("Error:", error.message);
   }
 }
+
+
+export const getConferencesForAuthor=async (id_author)=>{
+  try {
+    const response = await fetch(API_URL + `/conference/author/${id_author}`)
+    if(!response.ok){
+      throw new Error("Problema la fetch");
+    }
+    const result =await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error:",error.message);
+  }
+} 
+
