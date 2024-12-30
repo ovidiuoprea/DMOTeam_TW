@@ -25,8 +25,19 @@ async function getReviews(ORM=true) {
   }
 }
 
+async function createReview(review, ORM=true) {
+    if(!ORM) {
+        const sql = "INSERT INTO Reviews SET ?";
+        const [result] = await conn.query(sql, review);
+        return {review_id: result.insertId, ...review}
+    }
+    else {
+        return await Review.create(review);
+    }
+}
 
 export {
   associationsTest,
   getReviews,
+  createReview
 }
