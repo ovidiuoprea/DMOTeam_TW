@@ -23,7 +23,7 @@ conferencesRouter.route('/conference')
         if(!conference || Object.keys(conference).length == 0) {
             return res.status(400).json({"message": "Invalid request"});
         }
-        if(!conference.organizer_id) {
+        if(!conference.organizer_id || !conference.name || !conference.description) {
             res.status(400).json({"message": "Invalid conference object"});
         }
         else {

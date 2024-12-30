@@ -17,6 +17,14 @@ const Conference = dbORM.define("Conferences", {
             key: 'organizer_id'
         },
         onDelete: 'CASCADE'
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    description: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 })
 
