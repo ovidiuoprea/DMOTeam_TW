@@ -5,6 +5,9 @@ import ShowAllConferences from './ShowAllConferences'
 import ShowRegisteresConferences from './ShowRegisteresConferences'
 
 const AutorUI = ({user}) => {
+    const AVAILABLE_CONFERENCES_PAGE = 1;
+    const REGISTERED_CONFERENCES_PAGE = 2;
+
     const [activePage,setActivePage]=useState();
   
   
@@ -28,8 +31,8 @@ const AutorUI = ({user}) => {
             </p>
           </div>
           <div className='justify-center flex flex-col gap-4 px-16 mt-10'>
-            <Button text={"Vezi conferințele disponibile"} onClick={() => setActivePage(1)} />
-            <Button text={"Conferinte la care sunt inscris "} onClick={() => setActivePage(2)} />
+            <Button text={"Vezi conferințele disponibile"} onClick={() => setActivePage(AVAILABLE_CONFERENCES_PAGE)} />
+            <Button text={"Conferinte la care sunt inscris "} onClick={() => setActivePage(REGISTERED_CONFERENCES_PAGE)} />
           </div>
         </div>
         <div className=''>

@@ -6,6 +6,8 @@ import ShowAllArticles from './ShowAllArticles'
 const OrganizatorUI = ({user}) => {
   const [activePage,setActivePage]=useState();
 
+  const CREATE_CONFERENCE_PAGE = 1;
+  const SHOW_ALL_ARTICLES_PAGE = 2;
 
   const handleButtonClick = (page) => {
     setActivePage(page);
@@ -27,8 +29,8 @@ const OrganizatorUI = ({user}) => {
             </p>
           </div>
           <div className='justify-center flex flex-col gap-4 px-16 mt-10'>
-            <Button text={"Creează o nouă conferință"} onClick={() => setActivePage(1)} />
-            <Button text={"Starea articolelor"} onClick={() => setActivePage(2)} />
+            <Button text={"Creează o nouă conferință"} onClick={() => setActivePage(CREATE_CONFERENCE_PAGE)} />
+            <Button text={"Starea articolelor"} onClick={() => setActivePage(SHOW_ALL_ARTICLES_PAGE)} />
           </div>
         </div>
         <div className=''>
