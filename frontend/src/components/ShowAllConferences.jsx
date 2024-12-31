@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { createConferenceAuthor } from '../services/conferenceAuthorService';
+import { useNavigate } from 'react-router-dom';
 
 const ShowAllConferences = ({user}) => {
+  const navigate = useNavigate();
   const[conferences,setConferences]=useState([]);
 
   useEffect(()=>{
@@ -20,10 +22,14 @@ const ShowAllConferences = ({user}) => {
     }
 
     fetchData();
-  },[conferences])
+  })
 
   const registerToConference= async (conference_id)=>{
     await createConferenceAuthor(conference_id,user.user_id);
+  }
+
+  const handleNavigation= async (conference_id)=>{
+    await navigate(`/conference/${conference_id}`);
   }
 
   return (
@@ -38,6 +44,12 @@ const ShowAllConferences = ({user}) => {
               onClick={()=>{registerToConference(c.conference_id)}}
             >
               Înscriere
+            </button>
+            <button
+              className='bg-green-800 text-white font-bold rounded-md px-4 py-2'
+              onClick={()=>{handleNavigation(c.conference_id)}}
+            >
+              Acceseaza
             </button>
           </div>
         )
