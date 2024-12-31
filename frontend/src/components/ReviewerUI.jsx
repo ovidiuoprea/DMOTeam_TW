@@ -29,8 +29,7 @@ const ReviewerUI = ({user}) => {
               </div>
             </div>
             <div className=''>
-              {activePage===VIEW_ASSIGNED_ARTICLES && <ShowAllArticles show_all={false} reviewer_id={11}/>}
-              
+              {activePage===VIEW_ASSIGNED_ARTICLES && <ShowAllArticles show_all={false} reviewer_id={user.user_id}/>}
             </div>
           </div>
         </div>

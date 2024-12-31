@@ -44,7 +44,7 @@ const ShowAllArticles = ({show_all, reviewer_id}) => {
                     return article; 
                 })
             )
-           
+          
             setArticles(updatedArticles);
         }
         fetchData();

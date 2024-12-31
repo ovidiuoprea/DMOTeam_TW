@@ -222,8 +222,7 @@ async function getArticlesByReviewerID (reviewer_id, ORM = false) {
             WHERE r.reviewer_id = ?`;
 
             const [rows] = await conn.query(sql, reviewer_id);
-            return row  s;
-           
+            return rows;
         }
         catch(error) {
             console.error(error);
