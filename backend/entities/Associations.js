@@ -25,8 +25,8 @@ const Associations = () => {
     Conference.hasMany(ConferenceReviewer, {
         foreignKey: "conference_id"
     });
+    
 
-    // Changes I made, delete from here if its broken (im not good at making comments)
     ConferenceAuthor.belongsTo(User, {
         foreignKey: "author_id",
         onDelete: 'CASCADE'

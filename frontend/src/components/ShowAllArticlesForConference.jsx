@@ -29,9 +29,10 @@ const ShowAllArticlesForConference = ( {conference_id} ) => {
         <thead className="bg-blue-700 text-white">
           <tr>
             <th className="border border-gray-300 px-4 py-2 text-left">Title</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Nume conferinta</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Author Name</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Author ID</th>
             <th className="border border-gray-300 px-4 py-2 text-left">Id conferinta</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Id article</th>
           </tr>
         </thead>
         <tbody>
@@ -42,6 +43,7 @@ const ShowAllArticlesForConference = ( {conference_id} ) => {
                       <td className="border border-gray-300 px-4 py-2">{a.name}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.author_id}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.conference_id}</td>
+                      <td className="border border-gray-300 px-4 py-2">{a.article_id}</td>
                   </tr>
               )          
           })}

@@ -2,6 +2,8 @@ import Article from "../entities/Article.js";
 import conn from "../dbConfig.js";
 import ConferenceAuthor from "../entities/ConferenceAuthor.js";
 import Conference from "../entities/Conference.js";
+import User from "../entities/User.js";
+import { Sequelize } from "sequelize";
 
 async function associationsTest() {
   return Article.findOne({
@@ -24,15 +26,33 @@ async function getArticles(ORM=true) {
   }
 }
 
-async function getArticlesFromConference(provided_conference_id, ORM = true) {
+async function getArticlesFromConference(provided_conference_id, ORM = false) {
   if(!ORM){
-    const sql = `SELECT * FROM Articles WHERE conference_id = ?`;
+    const sql =  `select distinct a.*, u.name from articles a
+                  join conference_authors ca on ca.author_id = a.author_id
+                  join users u on u.user_id = ca.author_id
+                  WHERE a.conference_id = ?`;
     const [rows] = await conn.query(sql, provided_conference_id);
     return rows;
   }
   else {
+    //to-do: orm
     return await Article.findAll({
-          where: { conference_id: provided_conference_id }
+      include: [
+        {
+          model: ConferenceAuthor,
+          required: true,
+          include: [
+            {
+              model: User, // Join the User model to get the author's name
+              attributes: ['name'], // Only select the name from the User model
+            }
+          ]
+        }
+      ],
+      where: {
+        conference_id: provided_conference_id, 
+      },
     });
   }
 }
