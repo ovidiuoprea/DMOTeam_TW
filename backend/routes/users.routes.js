@@ -109,9 +109,9 @@ usersRouter.route('/article-by-reviewer-id/:reviewer_id')
         const result = await getArticlesByReviewerID(reviewer_id);
 
         if(!result) { 
-            return res.status(400).json({message: "Not a reviewer"});
+            res.status(400).json({message: "Not a reviewer"});
         }
-        return res.status(200).json({articles: result});
+        res.status(200).json(result);
     })
 
 export default usersRouter;
