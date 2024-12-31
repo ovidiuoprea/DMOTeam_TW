@@ -129,3 +129,21 @@ export const getReviewers=async ()=>{
         } 
 }
 
+
+export const getArticlesForReviewer = async (reviewer_id) => {
+    try{
+        const url = API_URL + "/article-by-reviewer-id/" + reviewer_id;
+        
+        const response = await fetch(url);
+        if(!response.ok){
+            throw new Error("Fetch articles for reviewer_id failed!");
+        }
+        
+        const result = await response.json();
+        
+        return Array.from(result);
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+}

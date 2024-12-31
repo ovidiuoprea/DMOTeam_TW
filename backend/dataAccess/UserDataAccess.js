@@ -216,13 +216,13 @@ async function getArticlesByReviewerID (reviewer_id, ORM = false) {
 
             const sql = `
             SELECT 
-                a.title as article_title, a.content as article_content, a.is_approved as article_is_approved, a.conference_id as article_conference_id, a.author_id as article_author_id
+                a.article_id, a.title, a.content, a.is_approved, a.conference_id, a.author_id
             FROM Articles a 
             JOIN Reviews r ON a.article_id = r.article_id 
             WHERE r.reviewer_id = ?`;
 
             const [rows] = await conn.query(sql, reviewer_id);
-            return rows;
+            return row  s;
            
         }
         catch(error) {
