@@ -37,3 +37,19 @@ export const getConferencesForAuthor=async (id_author)=>{
   }
 } 
 
+export const getConferenceByID = async (conference_id) => {
+    try {
+        const url = API_URL + "/conference/" + conference_id;
+
+        const response = await fetch(url);
+        if(!response.ok) {
+            throw new Error("Could not GET conference by conference_id");
+        }
+        const result = await response.json();
+        return result;
+    }
+    catch(error) {
+        console.error("Error: ", error.message);
+    }
+}
+
