@@ -1,11 +1,17 @@
 import express from "express";
-import { getReviews, associationsTest, getReviewById, createReview, deleteReview, updateReview } from "../dataAccess/ReviewsDataAccess.js"
+import { getReviews, associationsTest, getReviewById, createReview, deleteReview, updateReview,getReviewsData } from "../dataAccess/ReviewsDataAccess.js"
 
 
 const reviewsRouter = express.Router();
 
 reviewsRouter.route('/review')
     .get(async (req, res) => { res.status(200).json(await getReviews())}); 
+
+reviewsRouter.route('/review/:article_id')
+    .get(async(req,res)=>{
+        const article_id=req.params.article_id;
+        res.status(200).json(await getReviewsData(article_id))
+    });
 
 reviewsRouter.route('/associations-test')
     .get(async (req, res) => { res.status(200).json(await associationsTest())}); 

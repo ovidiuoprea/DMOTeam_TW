@@ -26,6 +26,21 @@ async function getArticles(ORM=true) {
   }
 }
 
+async function getArticleById(article_id,ORM=false) {
+  if(!ORM){
+    const sql = `SELECT a.title,a.content,a.is_approved,c.name conference_name,u.name author_name
+                  FROM articles a,users u,conferences c
+                  WHERE a.conference_id=c.conference_id
+                  AND a.author_id=u.user_id
+                  AND a.article_id= ?`;
+    const [rows] = await conn.query(sql,article_id);
+    return rows;
+  }
+  else{
+    // return await Article.findAll({where:{article_id:`${article_id}`}})
+  }
+}
+
 async function getArticlesFromConference(provided_conference_id, ORM = false) {
   if(!ORM){
     const sql =  `select distinct a.*, u.name from articles a
@@ -75,4 +90,5 @@ export {
   getArticles,
   getArticlesFromConferenceAndAuthor,
   getArticlesFromConference,
+  getArticleById,
 }

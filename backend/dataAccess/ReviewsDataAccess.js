@@ -25,6 +25,22 @@ async function getReviews(ORM=true) {
   }
 }
 
+async function getReviewsData(article_id,ORM=false) {
+  if(!ORM){
+    const sql =`SELECT r.review_id ,u.name,r.rating,a.is_approved,r.feedback
+                FROM users u, reviews r, articles a
+                WHERE u.user_id=r.reviewer_id
+                AND a.article_id=r.article_id
+                AND a.article_id=?;
+                `;
+    const [rows] =await conn.query(sql,article_id);
+    return rows;
+  }
+  else {
+    return await Review.findAll();
+  }
+}
+
 
 /**
  * Use JSON.stringify() in React to provide consistent data.
@@ -129,4 +145,5 @@ export {
   getReviews,
   updateReview,
   deleteReview,
+  getReviewsData,
 }
