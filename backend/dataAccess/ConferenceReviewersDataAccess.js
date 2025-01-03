@@ -46,11 +46,14 @@ async function getReviewersByConference (provided_conference_id, ORM = true) {
     }
     else {
         try {
-            return await ConferenceReviewer.findAll({
+            
+            const conference_reviewers = await ConferenceReviewer.findAll({
                 where: {
                     conference_id: provided_conference_id  
                 }
-            });
+            });            
+            console.log("Data sent to frontend:", conference_reviewers.map(r => r.get({ plain: true })));
+            return conference_reviewers
         } catch (error) {
             return {error: true, message: "Conferences not found", object: null}
         }
