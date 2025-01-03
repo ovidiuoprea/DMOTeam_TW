@@ -13,8 +13,8 @@ const HomePage = () => {
       <NavBar/> 
       {/* {user.role==="Organizer" && <OrganizatorUI user={user} />}
       {user.role==="Author" && <AutorUI user={user} />} */}
-      {/* <AutorUI user={user} />   */}
-      <ReviewerUI user={user}/>
+      <AutorUI user={user} />  
+      {/* <ReviewerUI user={user}/> */}
       {/* <OrganizatorUI user={user}/> */}
     </div>
   )
