@@ -34,6 +34,14 @@ const Article = dbORM.define("Articles",{
       key: 'author_id', 
     },
     onDelete: 'CASCADE',
+  },
+  reviewer_id1: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  reviewer_id2: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   }
 })
 
