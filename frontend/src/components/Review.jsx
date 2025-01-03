@@ -1,23 +1,25 @@
 import React from 'react'
 
-const Review = () => {
+const Review = ({review}) => {
   return (
-    <div className='w-full h-fit bg-gray-400 rounded-lg p-2'>
+    <div className='w-full h-fit bg-gray-200 rounded-lg p-2'>
       <div className='flex items-center'>
         <span className="material-symbols-outlined text-[40px]">account_circle</span>
-        <p className='text-lg'>*Reviewer name*</p>
+        <p className='text-lg'>{review.name}</p>
       </div>
       <div className='pl-8'>
-        <span className="material-symbols-outlined text-[25px] text-yellow-500">star</span>
-        <span className="material-symbols-outlined text-[25px] text-yellow-500">star</span>
-        <span className="material-symbols-outlined text-[25px] text-yellow-500">star</span>
-        <span className="material-symbols-outlined text-[25px] text-yellow-500">star</span>
-        <span className="material-symbols-outlined text-[25px] text-yellow-500">star</span>
+        <span className={"material-symbols-outlined text-[25px] "+ (review.rating>=1?" text-yellow-500":"")}>star</span>
+        <span className={"material-symbols-outlined text-[25px] "+ (review.rating>=2?" text-yellow-500":"")}>star</span>
+        <span className={"material-symbols-outlined text-[25px] "+ (review.rating>=3?" text-yellow-500":"")}>star</span>
+        <span className={"material-symbols-outlined text-[25px] "+ (review.rating>=4?" text-yellow-500":"")}>star</span>
+        <span className={"material-symbols-outlined text-[25px] "+ (review.rating>=5?" text-yellow-500":"")}>star</span>
       </div>
-      <h1 className='ml-8 text-white font-bold bg-red-700 w-fit p-1 rounded-lg mb-2'>Approved</h1>
+      <h1 className={'ml-8 text-white font-bold  w-fit p-1 rounded-lg mb-2 '+(review.is_approved?"bg-green-700":"bg-red-700")}>
+        {review.is_approved?"Aprobat":"Neaprobat"}
+      </h1>
 
       <div className='bg-white rounded-md p-4'>
-        Condimentum a erat habitasse magna gravida; vehicula leo. Luctus elementum fringilla fringilla leo lectus ornare ligula ante. Iaculis sollicitudin sapien justo arcu blandit quis interdum imperdiet ac.
+        {review.feedback}
       </div>
     </div>
   )

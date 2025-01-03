@@ -104,6 +104,31 @@ async function deleteArticle (id, ORM = true) {
   }
 }
 
+async function getArticleById(article_id,ORM=false) {
+  if(!ORM){
+    const sql = `SELECT 
+    a.title,
+    a.content,
+    c.name AS conference_name,
+    u.name AS author_name,
+    isArticleApproved(a.article_id) AS is_approved
+    FROM 
+        articles a
+    JOIN 
+        users u ON a.author_id = u.user_id
+    JOIN 
+        conferences c ON a.conference_id = c.conference_id
+    WHERE 
+        a.article_id = ?;
+    `;
+    const [rows] = await conn.query(sql,article_id);
+    return rows;
+  }
+  else{
+    // return await Article.findAll({where:{article_id:`${article_id}`}})
+  }
+}
+
 async function getArticlesFromConference(provided_conference_id, ORM = false) {
   if(!ORM){
     const sql =  `select distinct a.*, u.name from articles a
@@ -176,4 +201,5 @@ export {
   updateArticle,
   deleteArticle,
   getArticleById
+  getArticleById,
 }

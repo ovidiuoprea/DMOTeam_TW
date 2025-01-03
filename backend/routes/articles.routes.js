@@ -1,5 +1,5 @@
 import express from "express";
-import {associationsTest, getArticles, getArticlesFromConference, getArticleData, createArticle, updateArticle, deleteArticle, getArticleById} from "../dataAccess/ArticlesDataAccess.js"
+import {associationsTest, getArticles, getArticlesFromConference, getArticleData, createArticle, updateArticle, deleteArticle, getArticleById,getArticleById} from "../dataAccess/ArticlesDataAccess.js"
 
 
 const articlesRouter = express.Router();
@@ -7,6 +7,12 @@ const articlesRouter = express.Router();
 
 articlesRouter.route('/associations-test')
     .get(async (req, res) => { res.status(200).json(await associationsTest())}); 
+
+articlesRouter.route('/article/:article_id')
+    .get(async (req,res)=>{
+        const article_id= req.params.article_id;
+        res.status(200).json((await getArticleById(article_id))[0]);
+    })
 
 articlesRouter.route('/article')
     .get(async (req, res) => { res.status(200).json(await getArticles())}); 

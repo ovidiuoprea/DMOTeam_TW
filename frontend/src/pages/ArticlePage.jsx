@@ -1,9 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import Review from '../components/Review'
+import { useParams } from 'react-router-dom';
+import { getArticleById } from '../services/articleService';
+import { getArticleReviews } from '../services/reviewsService';
+import AddReview from '../components/AddReview';
+import { getCurrentAuthenticatedUser } from '../services/userService';
+
+
 
 
 const ArticlePage = () => {
+  const [user, setUser] = useState(getCurrentAuthenticatedUser());
+
+  const { article_id } = useParams();
+  const [article,setArticle]=useState(null);
+  const [reviews,setReviews]=useState([]);
+  const [addReview,setAddReview]=useState(false);
+
+  useEffect(()=>{
+    const fetchArticleData=async ()=>{
+      const article=await getArticleById(article_id);
+      console.log(article);
+      setArticle(article);
+
+      const reviewsData=await getArticleReviews(article_id);
+      console.log(reviewsData);
+      setReviews(reviewsData)
+    }
+
+    fetchArticleData();
+  },[])
+
+
   return (
     <div className='w-full'>
       <NavBar />  
@@ -16,16 +45,16 @@ const ArticlePage = () => {
               <p className='text-right'>Statusul articolului:</p>                 
             </div>
             <div className='flex flex-col p-4 gap-3 '>
-              <span className='font-bold'>*Nume Autor*</span> 
-              <span className='font-bold'>*Nume conferinta*</span>
-              <span className='font-bold text-red-700'>*Status articol*</span>
+              <span className='font-bold'>{article?.author_name}</span> 
+              <span className='font-bold'>{article?.conference_name}</span>
+              <span className={'font-bold '+ (article?.is_approved?"text-green-700":"text-red-700")}>{article?.is_approved?"Aprobat":"Neaprobat"}</span>
             </div>
           </div>
         </div>
         <div className='flex justify-center p-10 px-2'>
-          <div className='flex flex-col max-w-[700px] bg-white p-10 pl-16 gap-10'>
-            <h1 className='font-bold text-center'>Article title</h1>
-            <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Fringilla taciti vitae torquent fames iaculis accumsan ridiculus aliquam. Praesent auctor orci diam fringilla enim facilisi. Odio fusce velit ligula non elit. Habitasse dui nunc ultrices phasellus, ante laoreet aptent. Curae sem sollicitudin consequat sollicitudin orci montes? Parturient laoreet senectus egestas nostra vehicula class. Sociosqu consequat placerat elit habitasse nec, amet pharetra. Donec ac laoreet himenaeos montes odio habitant eleifend curae.Dapibus convallis hac sed elementum sapien fringilla nunc arcu. Nulla magna molestie mi congue nascetur enim. Pretium ultrices efficitur fusce libero suscipit class molestie. Ut penatibus primis gravida feugiat condimentum, mattis auctor fermentum. Primis sit massa natoque luctus placerat blandit. Libero conubia lobortis varius leo congue convallis? Nullam aliquet cursus fringilla risus maecenas massa orci auctor. Pretium urna rhoncus consectetur per massa facilisis. Id magna at quisque integer dis class morbi ultrices per.Primis vel ex ridiculus euismod a finibus. Netus ullamcorper cras himenaeos sit dapibus fusce vestibulum maecenas ante. Condimentum a erat habitasse magna gravida; vehicula leo. Luctus elementum fringilla fringilla leo lectus ornare ligula ante. Iaculis sollicitudin sapien justo arcu blandit quis interdum imperdiet ac. Porta vulputate enim nisl, venenatis venenatis ipsum mus aenean tristique. Penatibus velit nisl ligula sit, inceptos magnis. Convallis quis eros nascetur donec rutrum leo.Dolor sociosqu penatibus morbi erat sociosqu vulputate nec. Nisl turpis parturient condimentum, gravida class vulputate. Penatibus blandit curabitur lectus magna dolor eleifend. Aenean habitasse viverra fames lectus potenti sem. Nisi imperdiet enim iaculis; fringilla id augue porttitor pretium? Elementum sapien primis dictumst conubia bibendum venenatis nec. Mus curae condimentum eu auctor efficitur eu auctor ligula. Cubilia gravida nascetur fermentum dolor ad dis velit suspendisse.</p>
+          <div className='flex flex-col max-w-[700px] w-[700px] min-h-[800px] bg-white p-10 pl-16 gap-10'>
+            <h1 className='font-bold text-center'>{article?.title}</h1>
+            <p>{article?.content}</p>
           </div>
         </div>
         
@@ -33,23 +62,39 @@ const ArticlePage = () => {
 
 
       <div>
-        <div className='h-fit flex flex-wrap items-center p-10'>
-          <h1 className='text-2xl font-bold  mr-2'>
-            Review-urile criticilor
-          </h1>
-          <div>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+        <div className='flex max-md:flex-col max-md:mb-10 items-center'>
+          <div className='h-fit flex flex-wrap items-center p-10'>
+            <h1 className='text-2xl font-bold  mr-2'>
+              Review-urile criticilor
+            </h1>
+            <div>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+            </div>
+          </div>
+
+          {/* TO DO : VERIFICA DACA UTILIZATROUL ESTE REVIEWER */}
+          <div className='bg-blue-700 text-white px-8 py-4 rounded-lg w-fit h-fit font-bold cursor-pointer'
+            onClick={()=>{setAddReview(!addReview)}}
+          >
+            Adauga review
           </div>
         </div>
+        
 
-        <div className='flex flex-col px-10 max-lg:px-2 gap-2'>
-        {Array.from({ length: 10 }).map((_, index) => (
-          <Review key={index} />
-        ))}
+        <div>
+          {addReview && <AddReview user_id={user.user_id} article_id={article_id} />}
+        </div>
+
+        <div className='flex flex-col px-10 max-lg:px-2 gap-4'>
+          {reviews.map((r)=>{
+            return(
+              <Review review={r} key={r.review_id} />
+            )
+          })}
         </div>
         
       </div>

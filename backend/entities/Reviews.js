@@ -36,6 +36,10 @@ const Review = dbORM.define("Reviews", {
         type: Sequelize.TEXT,
         allowNull: false,
     },
+    is_approved:{
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+    },
 });
 
 export default Review;
