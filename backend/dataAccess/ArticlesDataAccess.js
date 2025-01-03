@@ -41,7 +41,7 @@ async function getArticleById(article_id,ORM=false) {
     JOIN 
         conferences c ON a.conference_id = c.conference_id
     WHERE 
-        a.article_id = 1;
+        a.article_id = ?;
     `;
     const [rows] = await conn.query(sql,article_id);
     return rows;
