@@ -39,7 +39,7 @@ async function createArticle(article, ORM = true) {
 }
 
 
-async function getArticleById(article_id, ORM = true) {
+async function getArticleById2(article_id, ORM = true) {
   if(!ORM) { 
       const sql = "SELECT * FROM Articles WHERE article_id = ?";
       const [rows] = await conn.query(sql, article_id);
@@ -200,6 +200,6 @@ export {
   createArticle,
   updateArticle,
   deleteArticle,
-  getArticleById
+  getArticleById2,
   getArticleById,
 }
