@@ -53,3 +53,20 @@ export const getConferenceByID = async (conference_id) => {
     }
 }
 
+export const getConferencesByOrganizerID = async (organizer_id) => {
+    try {
+        const url = API_URL + "/conference/organizer/" + organizer_id;
+        
+        const response = await fetch(url);
+        if(!response.ok) { 
+            throw new Error("Could not GET conferences by organizer_id");
+        }
+        const result = await response.json();
+        
+        return result;
+    }
+    catch(error) {
+        console.error("Error: ", error.message);
+    }
+}
+
