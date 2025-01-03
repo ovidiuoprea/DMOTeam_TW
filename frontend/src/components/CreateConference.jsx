@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Button from './Button';
 import { createConference } from '../services/conferenceService';
 import { getReviewers } from '../services/userService';
-import { createConferenceReviewer } from '../services/conferenceReviewers';
+import { createConferenceReviewer } from '../services/conferenceReviewersService';
 
-const CreateConference = ({user}) => {
+const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
   const [conferenceName,setConferenceName]=useState("");
   const [conferenceDescripition,setConferenceDescription]=useState("");
 
@@ -53,6 +53,8 @@ const CreateConference = ({user}) => {
               placeholder="Introdu numele conferinței ..." 
               required 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              defaultValue={edit_mode ? conferenceToEdit.name : ""}
+              
             />
         </div>
 
@@ -65,6 +67,7 @@ const CreateConference = ({user}) => {
               placeholder="Descrie conferinta ..." 
               required 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              defaultValue={edit_mode ? conferenceToEdit.description : ""}
             />
         </div>
 
