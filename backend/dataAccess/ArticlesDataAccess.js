@@ -3,7 +3,6 @@ import conn from "../dbConfig.js";
 import ConferenceAuthor from "../entities/ConferenceAuthor.js";
 import Conference from "../entities/Conference.js";
 import User from "../entities/User.js";
-import { Sequelize } from "sequelize";
 
 async function associationsTest() {
   return Article.findOne({
@@ -23,6 +22,85 @@ async function getArticles(ORM=true) {
   }
   else {
       return await Article.findAll();
+  }
+}
+
+async function createArticle(article, ORM = true) {
+  if(!ORM) { 
+      const sql = "INSERT INTO Articles SET ?";
+      const [result] = await conn.query(sql, article);
+
+      // Return data similar to ORM result:
+      return {article_id: result.insertId, ...article};
+  }
+  else {
+      return await Article.create(article);
+  }
+}
+
+
+async function getArticleById(article_id, ORM = true) {
+  if(!ORM) { 
+      const sql = "SELECT * FROM Articles WHERE article_id = ?";
+      const [rows] = await conn.query(sql, article_id);
+
+      // If no conference is found, Sequelize returns null, so I'm mimicking the behavior here too:
+      if(rows.length == 0) {
+          return null;
+      }
+
+      return rows;
+  }
+  else {
+      return await Article.findByPk(article_id);
+  }
+}
+
+
+async function updateArticle(id, updatedArticleData, ORM = true) {
+
+  if(parseInt(id) !== updatedArticleData.article_id) {
+      return {error: true, message: "Provided article_id does not match Article!"}
+  }
+
+  let existingArticle = await getArticleById(id);
+  if(!existingArticle) {
+      return {error: true, message: "Article with article_id not found"};
+  }
+
+  if(!ORM) { 
+      try{ 
+          const sql = "UPDATE Articles SET ? WHERE article_id = ?";
+          const [rows] = await conn.query(sql, updatedArticleData, id);
+          return {error: false, message: "Article successfully updated", object: [...updatedArticleData]}
+      }
+      catch(error) { 
+          console.error(error);
+      } 
+  }
+  else {
+      return {error: false, message: "Article successfuly updated", object: await existingArticle.update(updatedArticleData)};
+  }
+}
+
+async function deleteArticle (id, ORM = true) { 
+  let deleteEntity = await getArticleById(id);
+  if(!deleteEntity) { 
+      return {error: true, message: "No article found"};
+  }
+
+  if(!ORM) { 
+      try {
+          const sql = "DELETE FROM Articles WHERE article_id = ?";
+          const [rows] = await conn.query(sql, id);
+          return {error: false, message: "Article successfully deleted", object: deleteEntity}
+      }
+      catch (error) {
+          console.error(error);
+      }
+  }
+  else {
+      return {error: false, message: "Article successfully deleted", object: await deleteEntity.destroy()};
   }
 }
 
@@ -57,15 +135,34 @@ async function getArticlesFromConference(provided_conference_id, ORM = false) {
   }
 }
 
-async function getArticlesFromConferenceAndAuthor(provided_conference_id, provided_author_id, ORM = true) {
+async function getArticleData(provided_article_id, ORM = false) {
   if(!ORM){
-    const sql = `SELECT * FROM Articles WHERE conference_id = ? AND author_id = ?`;
-    const [rows] = await conn.query(sql, provided_conference_id, provided_author_id);
+    const sql =  `select distinct a.*, u.name as nume_autor, c.name as nume_conferinta from articles a
+                  join conference_authors ca on ca.author_id = a.author_id
+                  join conferences c on c.conference_id = a.conference_id
+                  join users u on u.user_id = ca.author_id
+                  WHERE a.article_id = ?`;
+    const [rows] = await conn.query(sql, provided_article_id);
     return rows;
   }
   else {
+    //to-do: orm
     return await Article.findAll({
-          where: { conference_id: provided_conference_id, author_id: provided_author_id }
+      include: [
+        {
+          model: ConferenceAuthor,
+          required: true,
+          include: [
+            {
+              model: User, // Join the User model to get the author's name
+              attributes: ['name'], // Only select the name from the User model
+            }
+          ]
+        }
+      ],
+      where: {
+        article_id: provided_article_id, 
+      },
     });
   }
 }
@@ -73,6 +170,10 @@ async function getArticlesFromConferenceAndAuthor(provided_conference_id, provid
 export {
   associationsTest,
   getArticles,
-  getArticlesFromConferenceAndAuthor,
   getArticlesFromConference,
+  getArticleData,
+  createArticle,
+  updateArticle,
+  deleteArticle,
+  getArticleById
 }

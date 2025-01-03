@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const ShowAllArticlesForConference = ( {conference_id} ) => {
+  const navigate = useNavigate();
   const [ articles, setArticles ] = useState([]);
 
   useEffect(()=>{
@@ -23,6 +25,10 @@ const ShowAllArticlesForConference = ( {conference_id} ) => {
 
   }, [conference_id]);
 
+  const handleNavigation = async (article_id)=>{
+    await navigate(`/article/${article_id}`);
+  }
+
   return (
     <div className="px-16 py-8">
       <table className="table-auto w-full border-collapse border border-gray-300">
@@ -38,7 +44,7 @@ const ShowAllArticlesForConference = ( {conference_id} ) => {
         <tbody>
           {articles.map(a => {
               return (
-                  <tr>
+                  <tr onClick={()=>{handleNavigation(a.article_id)}}>
                       <td className="border border-gray-300 px-4 py-2">{a.title}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.name}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.author_id}</td>
