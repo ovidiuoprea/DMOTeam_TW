@@ -6,7 +6,6 @@ import HomePage from './pages/HomePage.js';
 import SignUp from './pages/SignUp.js';
 import ArticlePage from './pages/ArticlePage.jsx';
 import ConferencePage from './pages/ConferencePage.js';
-import ArticlePg from './pages/ArticlePg.js';
 
 function App() {
   return (
@@ -17,7 +16,7 @@ function App() {
         <Route path='/signup' element={<SignUp/>}></Route>
         <Route path='/article/:article_id' element={<ArticlePage/>}></Route>
         <Route path='/conference/:conference_id' element={<ConferencePage/>}></Route>
-        <Route path='/article/:article_id' element={<ArticlePg/>}></Route>
+        {/* <Route path='/article/:article_id' element={<ArticlePg/>}></Route> */}
       </Routes>
     </Router>
 

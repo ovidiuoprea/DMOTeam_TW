@@ -1,5 +1,5 @@
 import express from "express";
-import {associationsTest, getArticles, getArticlesFromConference, getArticleData, createArticle, updateArticle, deleteArticle, getArticleById,getArticleById2} from "../dataAccess/ArticlesDataAccess.js"
+import {associationsTest, getArticles, getArticlesFromConference, createArticle, updateArticle, deleteArticle, getArticleById} from "../dataAccess/ArticlesDataAccess.js"
 
 
 const articlesRouter = express.Router();
@@ -38,11 +38,6 @@ articlesRouter.route('/article')
     }
 });
 
-articlesRouter.route('/article/:article_id')
-.get(async (req, res) => { 
-    const id = req.params.article_id;
-    res.status(200).json(await getArticleById2(id));
-});
 
 articlesRouter.route('/article/:article_id')
 .put(async (req, res) => {
@@ -76,10 +71,5 @@ articlesRouter.route('/article/:article_id')
         res.status(200).json(result.object);
     }
 });
-
-articlesRouter.route('/article-data/:article_id')
-.get(async (req, res) => {
-    res.status(200).json(await getArticleData(req.params.article_id));
-})
 
     export default articlesRouter
