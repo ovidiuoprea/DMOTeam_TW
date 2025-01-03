@@ -160,7 +160,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (9,3,'Nu',2,1,0),(10,5,'Imi place mult',1,1,1);
+INSERT INTO `reviews` VALUES (9,2,'nu',2,1,0),(10,5,'Imi place mult',1,1,1);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,4 +225,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-03 14:54:30
+-- Dump completed on 2025-01-03 15:02:22

@@ -33,18 +33,7 @@ async function getArticleById(article_id,ORM=false) {
     a.content,
     c.name AS conference_name,
     u.name AS author_name,
-    (
-        SELECT 
-            CASE 
-                WHEN SUM(CASE WHEN r.is_approved = 1 THEN 1 ELSE 0 END) >= 2 
-                THEN TRUE 
-                ELSE FALSE 
-            END
-        FROM 
-            reviews r
-        WHERE 
-            r.article_id = a.article_id
-    ) AS is_approved
+    isArticleApproved(a.article_id) AS is_approved
     FROM 
         articles a
     JOIN 
@@ -52,7 +41,7 @@ async function getArticleById(article_id,ORM=false) {
     JOIN 
         conferences c ON a.conference_id = c.conference_id
     WHERE 
-        a.article_id = ?;
+        a.article_id = 1;
     `;
     const [rows] = await conn.query(sql,article_id);
     return rows;
