@@ -25,12 +25,9 @@ export const createConferenceReviewer=async (selectedReviewerId,conference_id)=>
 
 export const getConferenceReviewerByConferenceID = async (conference_id) => {
     const url = API_URL + "/conference-reviewer/conference/" + conference_id;
-
-    try {
-        console.log("Hitting url: ", url);
+    try {       
         const response = await fetch(url);
         const result = await response.json();
-        console.log("Result: ", result);
         return result;
     }
     catch(error) {

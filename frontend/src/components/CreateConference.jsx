@@ -22,9 +22,7 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
         
         if(edit_mode) {
             const fetchAssignedReviewers = async () => { 
-                console.log("Conference: ", conferenceToEdit.conference_id);
                 const data = await getConferenceReviewerByConferenceID(conferenceToEdit.conference_id);
-                console.log("Data:", data);
                 setAssignedReviewers(data);
             }
             
@@ -40,14 +38,6 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
         : [...prevSelected, id] 
     );
   };
-
-  const handleAssignedReviewer = (id) => { 
-    setAssignedReviewers((prevSelected) =>
-        prevSelected.includes(id)
-          ? prevSelected.filter((reviewerId) => reviewerId !== id)
-          : [...prevSelected, id] 
-      );
-  }
 
   const handleOnSubmit =async (e)=>{
     e.preventDefault();
@@ -96,11 +86,10 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
               {reviewers.map((r) => (
                 <div
                   key={r.user_id}
-                  onClick={() => edit_mode ? handleAssignedReviewer(r.user_id) : handleSelectReviewer(r.user_id)}
+                  onClick={() => handleSelectReviewer(r.user_id)}
                   className={`p-4 mb-4 cursor-pointer rounded-lg transition-colors ${
                     selectedReviewers.includes(r.user_id) ? "bg-green-500 text-white" : "bg-gray-100"
-                     
-                  } ${assignedReviewers.some((assigned_reviewer) => { assigned_reviewer.reviewer_id = r.user_id }) ? "bg-green-800 text-white" : "bg-gray-100"}` }
+                  }` }
                 >
                   {r.name}
                 </div>
