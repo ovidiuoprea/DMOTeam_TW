@@ -216,7 +216,7 @@ async function getArticlesByReviewerID (reviewer_id, ORM = false) {
 
             const sql = `
             SELECT 
-                a.article_id, a.title, a.content, a.is_approved, a.conference_id, a.author_id
+                a.article_id, a.title, a.content, a.conference_id, a.author_id, isArticleApproved(a.article_id) AS is_approved
             FROM Articles a 
             JOIN Reviews r ON a.article_id = r.article_id 
             WHERE r.reviewer_id = ?`;

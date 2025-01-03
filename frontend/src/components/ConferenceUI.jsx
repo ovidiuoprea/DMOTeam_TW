@@ -51,7 +51,7 @@ const ConferenceUI = ( {conference_id} ) => {
         </div>
         <div className=''>
           {activePage===SHOW_ARTICLES && <ShowAllArticlesForConference conference_id = {conference_id} />}
-          {activePage===ADD_ARTICLE && <div>asdfas</div>}
+          {activePage===ADD_ARTICLE && <div>adf</div>}
         </div>
       </div>
     </div>

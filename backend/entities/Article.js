@@ -18,10 +18,6 @@ const Article = dbORM.define("Articles",{
     type: Sequelize.STRING,
     allowNull:false,
   },
-  is_approved: {
-    type: Sequelize.BOOLEAN,
-    allowNull:false,
-  },
   conference_id: {
     type: Sequelize.INTEGER,
     allowNull: false,

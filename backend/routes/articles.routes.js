@@ -30,7 +30,7 @@ articlesRouter.route('/article')
     if(!article || Object.keys(article).length == 0) {
         return res.status(400).json({"message": "Invalid request"});
     }
-    if(!article.title || !article.content || !article.is_approved || !article.conference_id || !article.author_id) {
+    if(!article.title || !article.content|| !article.conference_id || !article.author_id) {
         res.status(400).json({"message": "Invalid article object"});
     }
     else {
