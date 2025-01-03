@@ -14,9 +14,9 @@ async function associationsTest() {
   })
 }
 
-async function getArticles(ORM=true) {
+async function getArticles(ORM=false) {
   if(!ORM) {
-    const sql = "SELECT * FROM Articles";
+    const sql = "SELECT a.*,isArticleApproved(a.article_id) AS is_approved FROM Articles a";
     const [rows] = await conn.query(sql);
     return rows;
   }
