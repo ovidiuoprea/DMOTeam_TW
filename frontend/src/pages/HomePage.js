@@ -12,8 +12,8 @@ const HomePage = () => {
       <NavBar/> 
       {/* {user.role==="Organizer" && <OrganizatorUI user={user} />}
       {user.role==="Author" && <AutorUI user={user} />} */}
-      <AutorUI user={user} />  
-      {/* <OrganizatorUI user={user}/> */}
+      {/* <AutorUI user={user} />   */}
+      <OrganizatorUI user={user}/>
     </div>
   )
 }

@@ -39,23 +39,6 @@ async function createArticle(article, ORM = true) {
 }
 
 
-async function getArticleById2(article_id, ORM = true) {
-  if(!ORM) { 
-      const sql = "SELECT * FROM Articles WHERE article_id = ?";
-      const [rows] = await conn.query(sql, article_id);
-
-      // If no conference is found, Sequelize returns null, so I'm mimicking the behavior here too:
-      if(rows.length == 0) {
-          return null;
-      }
-
-      return rows;
-  }
-  else {
-      return await Article.findByPk(article_id);
-  }
-}
-
 
 async function updateArticle(id, updatedArticleData, ORM = true) {
 
@@ -160,46 +143,13 @@ async function getArticlesFromConference(provided_conference_id, ORM = false) {
   }
 }
 
-async function getArticleData(provided_article_id, ORM = false) {
-  if(!ORM){
-    const sql =  `select distinct a.*, u.name as nume_autor, c.name as nume_conferinta from articles a
-                  join conference_authors ca on ca.author_id = a.author_id
-                  join conferences c on c.conference_id = a.conference_id
-                  join users u on u.user_id = ca.author_id
-                  WHERE a.article_id = ?`;
-    const [rows] = await conn.query(sql, provided_article_id);
-    return rows;
-  }
-  else {
-    //to-do: orm
-    return await Article.findAll({
-      include: [
-        {
-          model: ConferenceAuthor,
-          required: true,
-          include: [
-            {
-              model: User, // Join the User model to get the author's name
-              attributes: ['name'], // Only select the name from the User model
-            }
-          ]
-        }
-      ],
-      where: {
-        article_id: provided_article_id, 
-      },
-    });
-  }
-}
 
 export {
   associationsTest,
   getArticles,
   getArticlesFromConference,
-  getArticleData,
   createArticle,
   updateArticle,
   deleteArticle,
-  getArticleById2,
   getArticleById,
 }

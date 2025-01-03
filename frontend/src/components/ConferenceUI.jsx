@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import ShowAllArticlesForConference from "./ShowAllArticlesForConference";
 
+import Button from './Button';
+
 const ConferenceUI = ( {conference_id} ) => {
 
   const [conference, setConference] = useState({});
+  const [activePage,setActivePage]=useState(1);
+  
+  const SHOW_ARTICLES = 1;
+  const ADD_ARTICLE = 2;
   
   useEffect(() => {
 
@@ -38,9 +44,14 @@ const ConferenceUI = ( {conference_id} ) => {
               Aici regăsești articole relevante într-un singur loc!
             </p>
           </div>
+          <div className='justify-center flex flex-col gap-4 px-16 mt-10'>
+            <Button text={"Arata articole curente"} onClick={() => setActivePage(SHOW_ARTICLES)} />
+            <Button text={"Adauga articol nou"} onClick={() => setActivePage(ADD_ARTICLE)} />
+          </div>
         </div>
         <div className=''>
-          <ShowAllArticlesForConference conference_id = {conference_id}/>
+          {activePage===SHOW_ARTICLES && <ShowAllArticlesForConference conference_id = {conference_id} />}
+          {activePage===ADD_ARTICLE && <div>asdfas</div>}
         </div>
       </div>
     </div>

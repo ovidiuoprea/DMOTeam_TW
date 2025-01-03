@@ -28,6 +28,8 @@ CREATE TABLE `articles` (
   `content` text,
   `conference_id` int DEFAULT NULL,
   `author_id` int DEFAULT NULL,
+  `reviewer_id1` int DEFAULT NULL,
+  `reviewer_id2` int DEFAULT NULL,
   PRIMARY KEY (`article_id`),
   KEY `fk_articles_conferences` (`conference_id`),
   KEY `fk_author_id` (`author_id`),
@@ -42,7 +44,7 @@ CREATE TABLE `articles` (
 
 LOCK TABLES `articles` WRITE;
 /*!40000 ALTER TABLE `articles` DISABLE KEYS */;
-INSERT INTO `articles` VALUES (1,'Articol1','Content1',1,2),(2,'Articol2','Content2',1,2);
+INSERT INTO `articles` VALUES (1,'Articol1','Content1',1,2,NULL,NULL),(2,'Articol2','Content2',1,2,NULL,NULL);
 /*!40000 ALTER TABLE `articles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,4 +227,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-03 15:02:22
+-- Dump completed on 2025-01-03 16:53:00
