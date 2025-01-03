@@ -28,11 +28,32 @@ async function getArticles(ORM=true) {
 
 async function getArticleById(article_id,ORM=false) {
   if(!ORM){
-    const sql = `SELECT a.title,a.content,a.is_approved,c.name conference_name,u.name author_name
-                  FROM articles a,users u,conferences c
-                  WHERE a.conference_id=c.conference_id
-                  AND a.author_id=u.user_id
-                  AND a.article_id= ?`;
+    const sql = `SELECT 
+    a.title,
+    a.content,
+    c.name AS conference_name,
+    u.name AS author_name,
+    (
+        SELECT 
+            CASE 
+                WHEN SUM(CASE WHEN r.is_approved = 1 THEN 1 ELSE 0 END) >= 2 
+                THEN TRUE 
+                ELSE FALSE 
+            END
+        FROM 
+            reviews r
+        WHERE 
+            r.article_id = a.article_id
+    ) AS is_approved
+    FROM 
+        articles a
+    JOIN 
+        users u ON a.author_id = u.user_id
+    JOIN 
+        conferences c ON a.conference_id = c.conference_id
+    WHERE 
+        a.article_id = ?;
+    `;
     const [rows] = await conn.query(sql,article_id);
     return rows;
   }

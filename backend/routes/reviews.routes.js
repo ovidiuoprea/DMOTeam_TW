@@ -1,5 +1,5 @@
 import express from "express";
-import { getReviews, associationsTest, getReviewById, createReview, deleteReview, updateReview,getReviewsData } from "../dataAccess/ReviewsDataAccess.js"
+import { getReviews, associationsTest, getReviewById, createReview, deleteReview, updateReview,getReviewsData,getReviewsByReviewerId} from "../dataAccess/ReviewsDataAccess.js"
 
 
 const reviewsRouter = express.Router();
@@ -13,6 +13,12 @@ reviewsRouter.route('/review/:article_id')
         res.status(200).json(await getReviewsData(article_id))
     });
 
+reviewsRouter.route('/review-reviewer/:reviewer_id')
+    .get(async(req,res)=>{
+        const reviewer_id=req.params.reviewer_id;
+        res.status(200).json(await getReviewsByReviewerId(reviewer_id))
+    })
+
 reviewsRouter.route('/associations-test')
     .get(async (req, res) => { res.status(200).json(await associationsTest())}); 
 
@@ -22,7 +28,7 @@ reviewsRouter.route('/review')
         if(!review || Object.keys(review).length == 0) {
             return res.status(400).json({"message": "Invalid request"});
         }
-        if(!review.rating || !review.feedback || !review.reviewer_id || !review.article_id) {
+        if(!review.rating || !review.feedback || !review.reviewer_id || !review.article_id || !review.is_approved) {
             res.status(400).json({"message": "Invalid review object"});
         }
         else {

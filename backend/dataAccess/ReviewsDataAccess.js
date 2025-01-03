@@ -28,7 +28,7 @@ async function getReviews(ORM=true) {
 async function getReviewsData(article_id,ORM=false) {
   if(!ORM){
     // MODIFICA a.is_approved SA FIE r.is_approved cand modificati baza de date
-    const sql =`SELECT r.review_id ,u.name,r.rating,a.is_approved,r.feedback
+    const sql =`SELECT r.review_id ,u.name,r.rating,r.is_approved,r.feedback
                 FROM users u, reviews r, articles a
                 WHERE u.user_id=r.reviewer_id
                 AND a.article_id=r.article_id
@@ -41,6 +41,25 @@ async function getReviewsData(article_id,ORM=false) {
     return await Review.findAll();
   }
 }
+
+async function getReviewsByReviewerId(reviewer_id, ORM = true) {
+  if (!ORM) {
+    const sql = `SELECT review_id FROM reviews WHERE reviewer_id = ? LIMIT 1`;
+    const [rows] = await conn.query(sql, [reviewer_id]);
+    return rows.length > 0 ? rows[0].review_id : false; 
+  } 
+  else {
+    const review = await Review.findOne({
+      where: {
+        reviewer_id: reviewer_id,
+      },
+      attributes: ["review_id"],
+    });
+    return review ? review.review_id : false; 
+  }
+}
+
+
 
 
 /**
@@ -147,4 +166,5 @@ export {
   updateReview,
   deleteReview,
   getReviewsData,
+  getReviewsByReviewerId,
 }
