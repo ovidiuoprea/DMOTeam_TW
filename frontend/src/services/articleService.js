@@ -16,7 +16,23 @@ export const getArticleById=async(article_id)=>{
 
 export const createArticle = async (articleData) => {
   try {
-    const response = await fetch(API_URL+`/article`, {
+    console.log(articleData);
+
+    const response = await fetch(process.env.REACT_APP_API_URL + `/conference-reviewer-api/conference-reviewer/conference/${articleData.conference_id}`);
+    const reviewers = await response.json(); 
+
+    console.log(articleData);
+    if (!response.ok) {
+      throw new Error('Failed to fetch reviewers');
+    }
+
+    articleData.reviewer_id1 = reviewers[Math.floor(Math.random() * reviewers.length)].reviewer_id;
+
+    do {
+      articleData.reviewer_id2 = reviewers[Math.floor(Math.random() * reviewers.length)].reviewer_id;
+    } while (articleData.reviewer_id1 === articleData.reviewer_id2); 
+
+    const articleResponse = await fetch(API_URL + '/article', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,14 +40,11 @@ export const createArticle = async (articleData) => {
       body: JSON.stringify(articleData),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Error: ${errorData.message}`);
-    }
+    const result = await articleResponse.json(); 
+    return { ok: true, result };
 
-    const data = await response.json();
-    console.log("Articol creat cu succes:", data);
   } catch (error) {
-    console.error("Eroare la crearea articolului:", error);
+    console.error("Error:", error.message);
+    return { error: error.message }; 
   }
 };
