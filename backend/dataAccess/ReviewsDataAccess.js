@@ -27,6 +27,7 @@ async function getReviews(ORM=true) {
 
 async function getReviewsData(article_id,ORM=false) {
   if(!ORM){
+    // MODIFICA a.is_approved SA FIE r.is_approved cand modificati baza de date
     const sql =`SELECT r.review_id ,u.name,r.rating,a.is_approved,r.feedback
                 FROM users u, reviews r, articles a
                 WHERE u.user_id=r.reviewer_id

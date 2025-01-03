@@ -4,13 +4,19 @@ import Review from '../components/Review'
 import { useParams } from 'react-router-dom';
 import { getArticleById } from '../services/articleService';
 import { getArticleReviews } from '../services/reviewsService';
+import AddReview from '../components/AddReview';
+import { getCurrentAuthenticatedUser } from '../services/userService';
+
 
 
 
 const ArticlePage = () => {
+  const [user, setUser] = useState(getCurrentAuthenticatedUser());
+
   const { article_id } = useParams();
   const [article,setArticle]=useState(null);
   const [reviews,setReviews]=useState([]);
+  const [addReview,setAddReview]=useState(false);
 
   useEffect(()=>{
     const fetchArticleData=async ()=>{
@@ -56,17 +62,31 @@ const ArticlePage = () => {
 
 
       <div>
-        <div className='h-fit flex flex-wrap items-center p-10'>
-          <h1 className='text-2xl font-bold  mr-2'>
-            Review-urile criticilor
-          </h1>
-          <div>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
-            <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+        <div className='flex max-md:flex-col max-md:mb-10 items-center'>
+          <div className='h-fit flex flex-wrap items-center p-10'>
+            <h1 className='text-2xl font-bold  mr-2'>
+              Review-urile criticilor
+            </h1>
+            <div>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+              <span className="material-symbols-outlined text-[30px] text-yellow-500">star</span>
+            </div>
           </div>
+
+          {/* TO DO : VERIFICA DACA UTILIZATROUL ESTE REVIEWER */}
+          <div className='bg-blue-700 text-white px-8 py-4 rounded-lg w-fit h-fit font-bold cursor-pointer'
+            onClick={()=>{setAddReview(!addReview)}}
+          >
+            Adauga review
+          </div>
+        </div>
+        
+
+        <div>
+          {addReview && <AddReview user_id={user.user_id} article_id={article_id} />}
         </div>
 
         <div className='flex flex-col px-10 max-lg:px-2 gap-4'>
