@@ -3,9 +3,11 @@ import ShowAllArticlesForConference from "./ShowAllArticlesForConference";
 
 import Button from './Button';
 import AddArticle from "./AddArticle";
+import { getCurrentAuthenticatedUser } from "../services/userService";
 
 const ConferenceUI = ( {conference_id} ) => {
 
+  const [user, setUSer] = useState(getCurrentAuthenticatedUser);
   const [conference, setConference] = useState({});
   const [activePage,setActivePage]=useState(1);
   
@@ -44,7 +46,7 @@ const ConferenceUI = ( {conference_id} ) => {
           </div>
           <div className='justify-center align-bottom flex flex-col gap-4 px-16 mt-10 mb-10'>
             <Button text={"Arata articole curente"} onClick={() => setActivePage(SHOW_ARTICLES)} />
-            <Button text={"Adauga articol nou"} onClick={() => setActivePage(ADD_ARTICLE)} />
+            {user?.role === 'Author' && <Button text={"Adauga articol nou"} onClick={() => setActivePage(ADD_ARTICLE)} />}
           </div>
         </div>
         <div className=''>
