@@ -92,6 +92,8 @@ async function getArticleById(article_id,ORM=false) {
     const sql = `SELECT 
     a.title,
     a.content,
+    a.reviewer_id1,
+    a.reviewer_id2,
     c.name AS conference_name,
     u.name AS author_name,
     isArticleApproved(a.article_id) AS is_approved
