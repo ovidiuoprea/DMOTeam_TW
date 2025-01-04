@@ -36,7 +36,7 @@ async function getConference(ORM = true) {
 /**
  * Use JSON.stringify() in React to provide consistent data.
  * @route POST /conference-api/conference with body
- * @param {type: JSON { organizer_id: " "}} conference 
+ * @param {type: JSON { organizer_id: number, name: String, description: String}} conference 
  * @param {type: boolean} ORM true = use Sequelize ORM, false = use MySQL pool 
  * @returns Conference inserted in the database.
  */

@@ -51,7 +51,7 @@ const ShowAllConferences = ({user, onEdit}) => {
         return(
           <div className='bg-gray-200 flex rounded-md px-8 py-2 justify-between items-center'>
             <p>{c.conference_id}</p> 
-            <p>Nume conferinta</p>
+            <p>{c.name ? c.name : 'Nume conferinta'}</p>
             {
                 (user && user.role === "Author") ?
                 (

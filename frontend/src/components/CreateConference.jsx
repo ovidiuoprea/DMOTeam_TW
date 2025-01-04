@@ -6,11 +6,10 @@ import { createConferenceReviewer, getConferenceReviewerByConferenceID } from '.
 
 const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
     const [conferenceName,setConferenceName]=useState("");
-    const [conferenceDescripition,setConferenceDescription]=useState("");
+    const [conferenceDescription,setConferenceDescription]=useState("");
 
-    const[reviewers,setReviewers]=useState([]);
+    const [reviewers,setReviewers]=useState([]);
     const [selectedReviewers, setSelectedReviewers] = useState([]); 
-    const [assignedReviewers, setAssignedReviewers] = useState([]);
 
 
     useEffect(() => {
@@ -19,18 +18,13 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
             setReviewers(data);
         };
         fetchReviewers();
-        
-        if(edit_mode) {
-            const fetchAssignedReviewers = async () => { 
-                const data = await getConferenceReviewerByConferenceID(conferenceToEdit.conference_id);
-                setAssignedReviewers(data);
-            }
-            
-            fetchAssignedReviewers();
-        }
     }, []);
 
 
+    /**
+     * 
+     * @param {*} id - 
+     */
   const handleSelectReviewer = (id) => {
     setSelectedReviewers((prevSelected) =>
       prevSelected.includes(id)
@@ -41,11 +35,18 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
 
   const handleOnSubmit =async (e)=>{
     e.preventDefault();
-    const conferenceId= await createConference(user.user_id);
-    
-    selectedReviewers.map((selectedReviewer)=>{
-      createConferenceReviewer(selectedReviewer,conferenceId)
-    })
+
+    if(!edit_mode) {
+
+        const conferenceId= await createConference(user.user_id, conferenceName, conferenceDescription);
+        
+        selectedReviewers.map((selectedReviewer)=>{
+          createConferenceReviewer(selectedReviewer,conferenceId)
+        })
+    }
+    else {
+        //TODO: Update conference;
+    }
   }
 
   return (
@@ -63,7 +64,7 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
               required 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               defaultValue={edit_mode ? conferenceToEdit.name : ""}
-              
+              onChange={(event)=>{setConferenceName(event.target.value)}}
             />
         </div>
 
@@ -77,6 +78,7 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
               required 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               defaultValue={edit_mode ? conferenceToEdit.description : ""}
+              onChange={(event)=>{setConferenceDescription(event.target.value)}}
             />
         </div>
 
@@ -87,9 +89,8 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
                 <div
                   key={r.user_id}
                   onClick={() => handleSelectReviewer(r.user_id)}
-                  className={`p-4 mb-4 cursor-pointer rounded-lg transition-colors ${
-                    selectedReviewers.includes(r.user_id) ? "bg-green-500 text-white" : "bg-gray-100"
-                  }` }
+                  className={`p-4 mb-4 cursor-pointer rounded-lg transition-colors 
+                    ${ selectedReviewers.includes(r.user_id) ? "bg-green-500 text-white" : "bg-gray-100" }}`}
                 >
                   {r.name}
                 </div>
