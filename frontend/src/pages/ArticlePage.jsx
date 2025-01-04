@@ -33,6 +33,64 @@ const ArticlePage = () => {
   },[])
 
 
+  const ArticlePagination = ({ content }) => {
+    const [paragraphs, setParagraphs] = useState([]);
+  
+    useEffect(() => {
+      if (content) {
+        const sentences = content.split('.'); 
+        let j = 0, i = 0;
+        const newParagraphs = [];
+        
+        while (j < sentences.length) {
+          let pageContent = '';
+          
+          while (pageContent.length < (i === 0 ? 1970 : 2200) && j < sentences.length) {
+            pageContent += sentences[j++];
+            if (pageContent[pageContent.length - 1] !== '.') pageContent += '.';
+          }
+  
+          newParagraphs.push(
+            <p key={i}>
+              {pageContent} 
+            </p>
+          );
+  
+          // If the page content is too short and not the first page, add padding
+          while (pageContent.length < 2200 && i !== 0) {
+            pageContent += '_____________________________________________________________________________';
+            if(pageContent.length < 2200 ) newParagraphs.push(<br />);
+          }
+  
+          // Add a pagination marker
+          newParagraphs.push(
+            <p key={`page-${i}`}>
+              <br /><strong>Pagina {i + 1}</strong> <br /><br /><hr /><br />
+            </p>
+          );
+  
+          i++;
+        }
+        newParagraphs.pop();
+        newParagraphs.push(
+          <p key={`page-${i - 1}`}>
+            <strong>Pagina {i}</strong> <br /> <br /><hr />
+          </p>
+        );
+  
+        setParagraphs(newParagraphs); // Set paragraphs state
+      }
+    }, [content]);
+  
+    return (
+      <div>
+        {paragraphs}
+      </div>
+    );
+  };
+    
+
+
   return (
     <div className='w-full'>
       <NavBar />  
@@ -52,9 +110,9 @@ const ArticlePage = () => {
           </div>
         </div>
         <div className='flex justify-center p-10 px-2'>
-          <div className='flex flex-col max-w-[700px] w-[700px] min-h-[800px] bg-white p-10 pl-16 gap-10'>
-            <h1 className='font-bold text-center'>{article?.title}</h1>
-            <p>{article?.content}</p>
+          <div className='flex flex-col max-w-[700px] w-[700px] min-h-[800px] max-h-[800px] bg-white p-10 pl-16 gap-10 overflow-y-scroll'>
+            <h1 className='font-bold text-2xl text-center'>{article?.title}</h1>
+            <ArticlePagination content = {article?.content} />
           </div>
         </div>
         
