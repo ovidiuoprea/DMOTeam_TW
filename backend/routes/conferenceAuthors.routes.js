@@ -1,5 +1,5 @@
 import express from "express";
-import { associationsTest, getConferenceAuthor, createConferenceAuthor, getConferenceAuthorById, updateConferenceAuthor, deleteConferenceAuthor, getAuthorsByConference } from "../dataAccess/ConferenceAuthorDataAccess.js";
+import { associationsTest, getConferenceAuthor, createConferenceAuthor, getConferenceAuthorById, updateConferenceAuthor, deleteConferenceAuthor, getAuthorsByConference, verifyIfAuthorIsRegisteredAtConference } from "../dataAccess/ConferenceAuthorDataAccess.js";
 
 const conferencesRouter = express.Router();
 
@@ -79,6 +79,25 @@ conferencesRouter.route('/conference-author/authors/:conference_id')
             return res.status(200).json({message: result.message, conference_author: result.object});
         }
     })
+    
+conferencesRouter.route('/conference-author/verify-registration/:conference_id-:author_id')
+.get(async (req, res) => {
+    verifyIfAuthorIsRegisteredAtConference
 
+    const conference_id = req.params.conference_id;
+    const author_id = req.params.author_id;
+
+    if(!conference_id && !author_id) {
+        return res.status(400).json({"message": "Invalid request"});
+    }
+    const result = await verifyIfAuthorIsRegisteredAtConference(conference_id, author_id);
+
+    if(result.error) {
+        return res.status(400).json(result.message);
+    }
+    else {
+        return res.status(200).json({message: result.message, conference_author: result.object});
+    }
+})
 
 export default conferencesRouter;

@@ -28,10 +28,11 @@ const AddArticle = ({ conference_id }) => {
     e.preventDefault();
 
     if (articleItem.title.length > 1 && articleItem.content.length > 1) {
-      const result = await createArticle(articleItem);
-      if(result.ok){
+      const response = await createArticle(articleItem);
+      if(response.ok){
         setUsed(true);
-        window.confirm('added ' + result.title);
+        window.confirm('Article ' + response.result.title + ' Added Successfully');
+        window.location.reload();
       }
     }
   };

@@ -39,3 +39,19 @@ export const deleteConferenceAuthor=async(ca_id)=>{
     console.error("Error:", error.message);
   }
 }
+
+export const isAuthorRegisteredForConference = async (conference_id, user_id) => {
+  try {
+    const response = await fetch(API_URL + `/conference-author/verify-registration/${conference_id}-${user_id}`);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch reviewers');
+    }
+
+    const result = await response.json(); 
+    return Boolean(result.message);
+
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+};

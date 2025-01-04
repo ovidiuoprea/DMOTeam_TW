@@ -4,6 +4,7 @@ import ShowAllArticlesForConference from "./ShowAllArticlesForConference";
 import Button from './Button';
 import AddArticle from "./AddArticle";
 import { getCurrentAuthenticatedUser } from "../services/userService";
+import { isAuthorRegisteredForConference } from "../services/conferenceAuthorService";
 
 const ConferenceUI = ( {conference_id} ) => {
 
@@ -34,6 +35,19 @@ const ConferenceUI = ( {conference_id} ) => {
 
 }, [conference_id]);
 
+const [isAuthorRegistered, setIsAuthorRegistered] = useState(false);
+
+useEffect(() => {
+  const checkAuthorRegistration = async () => {
+    if (user?.role === 'Author') {
+      const result = await isAuthorRegisteredForConference(conference_id, user.user_id);
+      setIsAuthorRegistered(result);
+    }
+  };
+  checkAuthorRegistration();
+}, [user, conference_id]);
+
+
   return (
     <div className=' pt-[80px] h-full w-full'>
       <div className='grid grid-cols-[2fr_4fr] h-full w-full max-lg:grid-cols-1 max-lg:h-fit'>
@@ -46,7 +60,7 @@ const ConferenceUI = ( {conference_id} ) => {
           </div>
           <div className='justify-center align-bottom flex flex-col gap-4 px-16 mt-10 mb-10'>
             <Button text={"Arata articole curente"} onClick={() => setActivePage(SHOW_ARTICLES)} />
-            {user?.role === 'Author' && <Button text={"Adauga articol nou"} onClick={() => setActivePage(ADD_ARTICLE)} />}
+            {isAuthorRegistered && <Button text={"Adauga articol nou"} onClick={() => setActivePage(ADD_ARTICLE)} />}
           </div>
         </div>
         <div className=''>

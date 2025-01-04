@@ -21,7 +21,6 @@ export const createArticle = async (articleData) => {
     const response = await fetch(process.env.REACT_APP_API_URL + `/conference-reviewer-api/conference-reviewer/conference/${articleData.conference_id}`);
     const reviewers = await response.json(); 
 
-    console.log(articleData);
     if (!response.ok) {
       throw new Error('Failed to fetch reviewers');
     }

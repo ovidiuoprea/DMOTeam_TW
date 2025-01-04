@@ -151,6 +151,33 @@ async function getAuthorsByConference (provided_conference_id, ORM = true ) {
     }
 } 
 
+async function verifyIfAuthorIsRegisteredAtConference (provided_conference_id, provided_author_id, ORM = true ) { 
+    if(!ORM) {
+        const sql = "SELECT * FROM conference_authors WHERE conference_id = ? AND author_id = ?";
+        const [rows] = await conn.query(sql, ca_id);
+
+        if(rows.length == 0) {
+            return false;
+        }
+
+        return true;
+    }
+    else{
+        const conferenceAuthor = await ConferenceAuthor.findOne({
+            where: {
+                conference_id: provided_conference_id,
+                author_id: provided_author_id
+            }
+        });
+
+        if(!conferenceAuthor) { 
+            return {error: false, message: false, object: null}
+        }
+
+        return {error: false, message: true, object: conferenceAuthor};
+    }
+} 
+
 export {
     associationsTest,
     getConferenceAuthor,
@@ -158,5 +185,6 @@ export {
     getConferenceAuthorById,
     updateConferenceAuthor,
     deleteConferenceAuthor,
-    getAuthorsByConference
+    getAuthorsByConference,
+    verifyIfAuthorIsRegisteredAtConference
 }
