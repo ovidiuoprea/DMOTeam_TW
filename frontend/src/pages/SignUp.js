@@ -15,15 +15,13 @@ const SignUp = () => {
 
             if(response.data){
                 updateLocalStorage(response.data, 3);
+
+                setTimeout(()=>{
+                    window.location.href="/"
+                }, 1000)
             }
 
-            setTimeout(()=>{
-                const user = getCurrentAuthenticatedUser();
-                if(user) {
-                    console.log("Currently authenticated user, after register: ");
-                    console.log(user);
-                }
-            }, 2000)
+            
         }
     }
 
@@ -91,9 +89,9 @@ const SignUp = () => {
             onChange={(event) => {setRole(event.target.value)}}
             name="role"
             required>
-                <option className="block text-sm font-medium text-gray-600 mb-1">Organizator</option>
+                <option className="block text-sm font-medium text-gray-600 mb-1">Organizer</option>
                 <option className="block text-sm font-medium text-gray-600 mb-1">Reviewer</option>
-                <option className="block text-sm font-medium text-gray-600 mb-1">Autor</option>
+                <option className="block text-sm font-medium text-gray-600 mb-1">Author</option>
           </select>
           {/* <input 
             type="text" 

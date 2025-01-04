@@ -1,8 +1,9 @@
 import { Sequelize } from "sequelize";
 import dbORM from "../dbORMConfig.js";
 import Conference from "./Conference.js"
+import User from "./User.js";
 
-const Conference_author = dbORM.define("Conference_authors", {
+const ConferenceAuthor = dbORM.define("Conference_authors", {
     ca_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -12,15 +13,21 @@ const Conference_author = dbORM.define("Conference_authors", {
     conference_id: { 
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+            model: Conference,  
+            key: 'conference_id', 
+        },
+        onDelete: 'CASCADE'
     },
     author_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true
+        references: {
+            model: User,  
+            key: 'author_id', 
+        },
+        onDelete: 'CASCADE'
     }
 })
 
-Conference.hasMany(Conference_author, {as: "ConferenceAuthors", foreignKey: "conference_id"});
-Conference_author.belongsTo(Conference, {as: "COnference", foreignKey: "conference_id"})
-
-export default Conference_author;
+export default ConferenceAuthor;

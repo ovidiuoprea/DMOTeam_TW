@@ -27,15 +27,13 @@ const Login = () => {
 
         if(logged_in_user) {
             updateLocalStorage(logged_in_user, 3);
+
+            setTimeout(()=> {
+                window.location.href="/";
+            }, 1000);
         }
 
-        setTimeout(()=>{
-            const user = getCurrentAuthenticatedUser();
-            if(user){
-                console.log("authenticated user: ");
-                console.log(user);
-            }
-        }, 2000)
+        
     }
 
   return (

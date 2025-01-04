@@ -1,18 +1,29 @@
 import express from "express";
-import { createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, updateConference } from "../dataAccess/ConferenceDataAccess.js";
+import { associationsTest, createConference, deleteConference, getConference, getConferenceById, getConferencesByOrganizerId, updateConference,getConferencesForAuthor,getAvailableConferences} from "../dataAccess/ConferenceDataAccess.js";
 
 const conferencesRouter = express.Router();
+
+conferencesRouter.route('/associations-test')
+    .get(async (req, res) => { res.status(200).json(await associationsTest())});
 
 conferencesRouter.route('/conference')
     .get(async (req, res) => { res.status(200).json(await getConference())});
 
+conferencesRouter.route('/available-conferences/:userId')
+    .get(async (req,res)=>{
+        const userId = req.params.userId;
+        res.status(200).json(await getAvailableConferences(userId))
+    });
+
 conferencesRouter.route('/conference')
     .post(async (req, res) => { 
         const conference = req.body;
+        console.log("Received conference data:", req.body);
+
         if(!conference || Object.keys(conference).length == 0) {
             return res.status(400).json({"message": "Invalid request"});
         }
-        if(!conference.organizer_id) {
+        if(!conference.organizer_id || !conference.name || !conference.description) {
             res.status(400).json({"message": "Invalid conference object"});
         }
         else {
@@ -57,8 +68,7 @@ conferencesRouter.route('/conference/:conference_id')
         else {
             res.status(200).json(result.object);
         }
-
-    })
+    });
 
 conferencesRouter.route('/conference/organizer/:organizer_id')
     .get(async (req, res) => { 
@@ -75,6 +85,18 @@ conferencesRouter.route('/conference/organizer/:organizer_id')
         else {
             return res.status(200).json({message: result.message, conference: result.object});
         }
+    })
+
+conferencesRouter.route('/conference/author/:author_id')
+    .get(async(req,res)=>{
+        const author_id= req.params.author_id
+
+        if(!author_id){
+            return res.status(400).json({"message": "Invalid request"});
+        }
+        const result= await getConferencesForAuthor(author_id);
+        
+        return res.status(200).json(result);
     })
 
 

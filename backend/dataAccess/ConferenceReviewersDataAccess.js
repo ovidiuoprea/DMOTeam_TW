@@ -33,6 +33,32 @@ async function getConferenceReviewer (ORM = true) {
     }
 }
 
+async function getReviewersByConference (provided_conference_id, ORM = true) { 
+    if(!ORM) {
+        try {
+            const sql = "SELECT * FROM conference_reviewers WHERE conference_id = ?";
+            const [rows] = await conn.query(sql, provided_conference_id);
+            return rows;
+        }
+        catch(error) {
+            console.error(error);
+        }
+    }
+    else {
+        try {
+            
+            const conference_reviewers = await ConferenceReviewer.findAll({
+                where: {
+                    conference_id: provided_conference_id  
+                }
+            });            
+            return conference_reviewers
+        } catch (error) {
+            return {error: true, message: "Conferences not found", object: null}
+        }
+    }
+}
+
 async function createConferenceReviewer( conference_reviewer, ORM = true ) {
     if(!ORM) {
         try {
@@ -130,5 +156,6 @@ export {
     createConferenceReviewer,
     getConferenceReviewerById,
     updateConferenceReviewer,
-    deleteConferenceReviewer
+    deleteConferenceReviewer,
+    getReviewersByConference
 }

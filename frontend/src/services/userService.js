@@ -105,10 +105,45 @@ export const updateLocalStorage = (user, EXPIRY_TIME_HOURS) => {
         user: user,
         expiresAt: expiryDate.toISOString()
     }
-
-    console.log(authData);
-
     localStorage.setItem("authData", JSON.stringify(authData));
+}
 
-    console.log(localStorage.getItem("authData").user);
+/**
+ * Gets all users with reviewer role
+ * 
+ * @returns all reviewers
+ */
+export const getReviewers=async ()=>{
+    try {
+        const response = await fetch(API_URL + "/userreviewer");
+
+
+        if (!response.ok) {
+            throw new Error("Ceva a mers prost cu fetch-ul");
+        }
+
+        const result = await response.json();
+        return result;
+        } catch (error) {
+        console.error(error.message); 
+        } 
+}
+
+
+export const getArticlesForReviewer = async (reviewer_id) => {
+    try{
+        const url = API_URL + "/article-by-reviewer-id/" + reviewer_id;
+        
+        const response = await fetch(url);
+        if(!response.ok){
+            throw new Error("Fetch articles for reviewer_id failed!");
+        }
+        
+        const result = await response.json();
+        
+        return Array.from(result);
+    }
+    catch (error) {
+        console.error(error.message);
+    }
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser,getReviewerUsers } from "../dataAccess/UserDataAccess.js";
+import { createUser, deleteUser, getUser, getUserById, getUserByEmail, login, updateUser, getUserByRole, getArticlesByReviewerID } from "../dataAccess/UserDataAccess.js";
 
 const usersRouter = express.Router();
 
@@ -7,7 +7,7 @@ usersRouter.route('/user')
     .get(async (req, res) => { res.status(200).json(await getUser())});
 
 usersRouter.route('/userreviewer')
-    .get(async (req,res)=>{ res.status(200).json (await getReviewerUsers())})
+    .get(async (req,res)=>{ res.status(200).json (await getUserByRole("Reviewer"))})
 
 usersRouter.route('/user')
     .post(async (req, res) => { 
@@ -28,6 +28,12 @@ usersRouter.route('/user/:user_id')
         const id = req.params.user_id;
         res.status(200).json(await getUserById(id));
     });
+
+usersRouter.route('/user-role/:role')
+    .get(async (req, res) => { 
+        const role = req.params.role;
+        res.status(200).json(await getUserByRole(role));
+    })
 
 usersRouter.route('/user/:user_id')
     .put(async (req, res) => {
@@ -97,5 +103,15 @@ usersRouter.route('/userEmail/:email')
         }
     })
 
+usersRouter.route('/article-by-reviewer-id/:reviewer_id')
+    .get(async (req, res) => { 
+        const reviewer_id = req.params.reviewer_id;
+        const result = await getArticlesByReviewerID(reviewer_id);
+
+        if(!result) { 
+            res.status(400).json({message: "Not a reviewer"});
+        }
+        res.status(200).json(result);
+    })
 
 export default usersRouter;

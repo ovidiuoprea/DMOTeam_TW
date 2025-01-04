@@ -1,5 +1,5 @@
 import express from "express";
-import { associationsTest, getConferenceReviewer, createConferenceReviewer, getConferenceReviewerById, updateConferenceReviewer, deleteConferenceReviewer } from "../dataAccess/ConferenceReviewersDataAccess.js";
+import { associationsTest, getConferenceReviewer, createConferenceReviewer, getConferenceReviewerById,getReviewersByConference, updateConferenceReviewer, deleteConferenceReviewer } from "../dataAccess/ConferenceReviewersDataAccess.js";
 
 const conferenceReviewersRouter = express.Router();
 
@@ -32,6 +32,13 @@ conferenceReviewersRouter.route("/conference-reviewer/:cr_id")
         const cr_id = req.params.cr_id;
         res.status(200).json(await getConferenceReviewerById(cr_id));
     });
+
+conferenceReviewersRouter.route("/conference-reviewer/conference/:conference_id")
+.get(async (req, res) => { 
+    const conference_id = req.params.conference_id;
+    res.status(200).json(await getReviewersByConference(conference_id));
+});
+
 
 conferenceReviewersRouter.route("/conference-reviewer/:cr_id").put(async (req, res) => { 
     const cr_id = req.params.cr_id;

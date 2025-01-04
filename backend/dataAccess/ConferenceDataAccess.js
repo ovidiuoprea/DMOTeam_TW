@@ -1,5 +1,19 @@
 import Conference from "../entities/Conference.js";
+import ConferenceAuthor from "../entities/ConferenceAuthor.js"
 import conn from "../dbConfig.js";
+import { Sequelize } from "sequelize";
+import User from "../entities/User.js";
+
+
+async function associationsTest() {
+    return Conference.findOne({
+        where: {conference_id: 1},
+        include: [
+            { model: User, attributes: ["name"]}
+        ]
+    })
+}
+
 
 /**
  * If ORM fails, call this as getConference(false), as it will switch to the default MySQL promise-based pool
@@ -22,7 +36,7 @@ async function getConference(ORM = true) {
 /**
  * Use JSON.stringify() in React to provide consistent data.
  * @route POST /conference-api/conference with body
- * @param {type: JSON { organizer_id: " "}} conference 
+ * @param {type: JSON { organizer_id: number, name: String, description: String}} conference 
  * @param {type: boolean} ORM true = use Sequelize ORM, false = use MySQL pool 
  * @returns Conference inserted in the database.
  */
@@ -138,11 +152,81 @@ async function getConferencesByOrganizerId (provided_organizer_id, ORM = true ) 
     }
 } 
 
+async function getAvailableConferences(userId, ORM = false) {
+    if (!ORM) {
+        const sql = `
+            SELECT c.* 
+            FROM Conferences c
+            WHERE c.conference_id NOT IN (
+                SELECT ca.conference_id 
+                FROM Conference_authors ca 
+                WHERE ca.author_id = ?
+            );
+        `;
+        const [rows] = await conn.query(sql, [userId]);
+        return rows;
+    } else {
+        const conferences = await Conference.findAll({
+            where: {
+                conference_id: {
+                    [Sequelize.Op.notIn]: Sequelize.literal(`
+                        (SELECT ca.conference_id 
+                        FROM Conference_authors ca 
+                        WHERE ca.author_id = ${userId})
+                    `),
+                },
+            },
+        });
+
+        // Returnează doar câmpurile relevante
+        return conferences.map(conf => ({
+            conference_id: conf.conference_id,
+            organizer_id: conf.organizer_id,
+        }));
+    }
+}
+
+
+async function getConferencesForAuthor(authorId, ORM = true) {
+    if (!ORM) {
+        const sql = `
+            SELECT c.*, ca.ca_id
+            FROM Conferences c
+            INNER JOIN Conference_authors ca ON c.conference_id = ca.conference_id
+            WHERE ca.author_id = ?;
+        `;
+        const [rows] = await conn.query(sql, [authorId]);   
+        return rows;
+    } else {
+        const rows = await Conference.findAll({
+            include: [
+                {
+                    model: ConferenceAuthor,
+                    required: true,   
+                    attributes: ["ca_id"],
+                    where: { author_id: authorId } 
+                }
+            ]
+        });
+        
+        return rows.map(conf => ({
+            conference_id: conf.conference_id, 
+            organizer_id:  conf.organizer_id,
+            name: conf.name,
+            description: conf.description,
+            ca_id: conf.Conference_authors[0].ca_id
+        })); 
+    }
+}
+
 export {
+    associationsTest,
     getConference,
     createConference,
     getConferenceById,
     updateConference,
     deleteConference,
-    getConferencesByOrganizerId
+    getConferencesByOrganizerId,
+    getConferencesForAuthor,
+    getAvailableConferences,
 }

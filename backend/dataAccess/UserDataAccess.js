@@ -19,6 +19,36 @@ async function getUser(ORM = true) {
     }
 }
 
+
+/**
+ * Get all the users with specified role
+ * @route GET /user-api/user-role/:
+ * @param {*} role 
+ * @param {*} ORM 
+ * @returns Array containing users with the specified role.
+ */
+async function getUserByRole(role, ORM=true) { 
+    if(!ORM) {
+        const sql = "SELECT * FROM Users where role = ?";
+        const [rows] = await conn.query(sql);
+        return rows;
+    }
+    else {
+        return await User.findAll({
+            where: {
+                role: role
+            }
+        })
+    }
+}
+
+
+/**
+ * Get all the users with role="Reviewer"
+ * @route GET /user-api/userreviewer
+ * @param {*} ORM 
+ * @returns All the users with role="Reviewer"
+ */
 async function getReviewerUsers(ORM = true) {
     if (!ORM) {
         const sql = "SELECT * FROM Users WHERE role = 'Reviewer'"; 
@@ -169,6 +199,40 @@ async function getUserByEmail (provided_email, ORM = true ) {
     }
 } 
 
+/**
+ * Get all the articles assigned to user specified by reviewer_id
+ * @route GET /user-api/article-by-reviewer-id/:reviewer_id
+ * @param {*} reviewer_id User_id for whom to get articles for.
+ * @param {*} ORM 
+ * @returns {articles: JSON} Articles assigned to user with user_id = reviewer_id
+ */
+async function getArticlesByReviewerID (reviewer_id, ORM = false) {
+    if(!ORM) {
+        try{
+            const user = await getUserById(reviewer_id);
+            if(!user.role === "Reviewer") {
+                return null;
+            }
+
+            const sql = `
+            SELECT 
+                a.article_id, a.title, a.content, a.conference_id, a.author_id, isArticleApproved(a.article_id) AS is_approved
+            FROM Articles a 
+            JOIN Reviews r ON a.article_id = r.article_id 
+            WHERE r.reviewer_id = ?`;
+
+            const [rows] = await conn.query(sql, reviewer_id);
+            return rows;
+        }
+        catch(error) {
+            console.error(error);
+        }
+    }
+    else {
+        //TODO: ORM.
+    }
+}
+
 export {
     getUser,
     createUser,
@@ -177,5 +241,7 @@ export {
     deleteUser,
     login,
     getUserByEmail,
-    getReviewerUsers
+    getReviewerUsers,
+    getUserByRole,
+    getArticlesByReviewerID
 }

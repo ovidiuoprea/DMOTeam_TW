@@ -162,7 +162,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (9,2,'nu',2,1,0),(10,5,'Imi place mult',1,1,1);
+INSERT INTO `reviews` VALUES (9,5,'bun',2,1,1),(10,5,'Imi place mult',1,1,1);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,6 +217,41 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'Ovidiu-Cristian Oprea','ovidiu-cristian@proiect-tw.com','ovidiu','Organizer'),(2,'Neculai Marius','marius@proiect-tw.com','marius','Organizer'),(3,'Neacsu David','david@proiect-tw.com','david','Organizer'),(5,'Reviewer','review@email.com','1234','Reviewer'),(6,'Reviewer2','review2@email.com','1234','Reviewer'),(7,'Reviewer3','review3@email.com','1234','Reviewer'),(8,'Reviewer4','review4@email.com','1234','Reviewer'),(9,'Reviewer5','review5@email.com','1234','Reviewer');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'tw_database'
+--
+/*!50003 DROP FUNCTION IF EXISTS `isArticleApproved` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `isArticleApproved`(articleId INT) RETURNS tinyint(1)
+    DETERMINISTIC
+BEGIN
+    DECLARE approvedCount INT;
+
+    SELECT 
+        COUNT(*)
+    INTO 
+        approvedCount
+    FROM 
+        reviews
+    WHERE 
+        article_id = articleId AND is_approved = 1;
+
+    RETURN approvedCount >= 2;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -227,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-03 16:53:00
+-- Dump completed on 2025-01-03 18:17:47

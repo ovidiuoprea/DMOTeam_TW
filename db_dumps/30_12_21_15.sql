@@ -26,10 +26,9 @@ CREATE TABLE `articles` (
   `article_id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `content` text,
+  `is_approved` tinyint(1) DEFAULT NULL,
   `conference_id` int DEFAULT NULL,
   `author_id` int DEFAULT NULL,
-  `reviewer_id1` int DEFAULT NULL,
-  `reviewer_id2` int DEFAULT NULL,
   PRIMARY KEY (`article_id`),
   KEY `fk_articles_conferences` (`conference_id`),
   KEY `fk_author_id` (`author_id`),
@@ -44,7 +43,6 @@ CREATE TABLE `articles` (
 
 LOCK TABLES `articles` WRITE;
 /*!40000 ALTER TABLE `articles` DISABLE KEYS */;
-INSERT INTO `articles` VALUES (1,'Articol1','Content1',1,2,NULL,NULL),(2,'Articol2','Content2',1,2,NULL,NULL);
 /*!40000 ALTER TABLE `articles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +62,7 @@ CREATE TABLE `conference_authors` (
   KEY `fk_ca_authors` (`author_id`),
   CONSTRAINT `fk_ca_authors` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `fk_ca_conferences` FOREIGN KEY (`conference_id`) REFERENCES `conferences` (`conference_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +71,6 @@ CREATE TABLE `conference_authors` (
 
 LOCK TABLES `conference_authors` WRITE;
 /*!40000 ALTER TABLE `conference_authors` DISABLE KEYS */;
-INSERT INTO `conference_authors` VALUES (55,1,2),(56,2,2),(57,3,2),(58,4,2),(59,5,2),(60,6,2),(61,7,2);
 /*!40000 ALTER TABLE `conference_authors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,8 +113,6 @@ DROP TABLE IF EXISTS `conferences`;
 CREATE TABLE `conferences` (
   `conference_id` int NOT NULL AUTO_INCREMENT,
   `organizer_id` int DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`conference_id`),
   KEY `fk_users_conferences` (`organizer_id`),
   CONSTRAINT `fk_users_conferences` FOREIGN KEY (`organizer_id`) REFERENCES `users` (`user_id`)
@@ -130,7 +125,7 @@ CREATE TABLE `conferences` (
 
 LOCK TABLES `conferences` WRITE;
 /*!40000 ALTER TABLE `conferences` DISABLE KEYS */;
-INSERT INTO `conferences` VALUES (1,1,'Nume conferinta','Descriere conferinta'),(2,2,'Nume conferinta','Descriere conferinta'),(3,3,'Nume conferinta','Descriere conferinta'),(4,3,'Nume conferinta','Descriere conferinta'),(5,3,'Nume conferinta','Descriere conferinta'),(6,2,'Nume conferinta','Descriere conferinta'),(7,2,'Nume conferinta','Descriere conferinta'),(8,2,'Nume conferinta','Descriere conferinta'),(9,2,'Nume conferinta','Descriere conferinta'),(10,2,'Nume conferinta','Descriere conferinta'),(11,2,'Nume conferinta','Descriere conferinta'),(12,2,'Nume conferinta','Descriere conferinta'),(13,2,'Nume conferinta','Descriere conferinta'),(14,2,'Nume conferinta','Descriere conferinta'),(15,2,'Nume conferinta','Descriere conferinta'),(16,2,'Nume conferinta','Descriere conferinta'),(17,2,'Nume conferinta','Descriere conferinta'),(18,2,'Nume conferinta','Descriere conferinta'),(19,2,'Nume conferinta','Descriere conferinta'),(20,2,'Nume conferinta','Descriere conferinta'),(21,2,'Nume conferinta','Descriere conferinta'),(22,2,'Nume conferinta','Descriere conferinta'),(23,2,'Nume conferinta','Descriere conferinta'),(24,2,'Nume conferinta','Descriere conferinta');
+INSERT INTO `conferences` VALUES (1,1),(2,2),(6,2),(7,2),(8,2),(9,2),(10,2),(11,2),(12,2),(13,2),(14,2),(15,2),(16,2),(17,2),(18,2),(19,2),(20,2),(21,2),(22,2),(23,2),(24,2),(3,3),(4,3),(5,3);
 /*!40000 ALTER TABLE `conferences` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,13 +142,12 @@ CREATE TABLE `reviews` (
   `feedback` text,
   `reviewer_id` int DEFAULT NULL,
   `article_id` int DEFAULT NULL,
-  `is_approved` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`review_id`),
   KEY `fk_reviews_reviewer` (`reviewer_id`),
   KEY `fk_reviews_article` (`article_id`),
   CONSTRAINT `fk_reviews_article` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_reviews_reviewer` FOREIGN KEY (`reviewer_id`) REFERENCES `conference_reviewers` (`reviewer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +156,6 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (9,2,'nu',2,1,0),(10,5,'Imi place mult',1,1,1);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,4 +220,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-03 16:53:00
+-- Dump completed on 2024-12-30 21:14:32
