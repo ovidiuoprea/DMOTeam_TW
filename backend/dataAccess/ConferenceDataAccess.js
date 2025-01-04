@@ -152,7 +152,7 @@ async function getConferencesByOrganizerId (provided_organizer_id, ORM = true ) 
     }
 } 
 
-async function getAvailableConferences(userId, ORM = true) {
+async function getAvailableConferences(userId, ORM = false) {
     if (!ORM) {
         const sql = `
             SELECT c.* 
