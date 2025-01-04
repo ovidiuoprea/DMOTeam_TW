@@ -210,18 +210,17 @@ async function getArticlesByReviewerID (reviewer_id, ORM = false) {
     if(!ORM) {
         try{
             const user = await getUserById(reviewer_id);
-            if(!user.role === "Reviewer") {
+            if(user.role !== "Reviewer") {
                 return null;
             }
 
             const sql = `
             SELECT 
-                a.article_id, a.title, a.content, a.conference_id, a.author_id, isArticleApproved(a.article_id) AS is_approved
-            FROM Articles a 
-            JOIN Reviews r ON a.article_id = r.article_id 
-            WHERE r.reviewer_id = ?`;
+               *, isArticleApproved(article_id) AS is_approved
+            FROM Articles 
+            WHERE reviewer_id1 = ? OR reviewer_id2 = ?`;
 
-            const [rows] = await conn.query(sql, reviewer_id);
+            const [rows] = await conn.query(sql, [reviewer_id, reviewer_id]);
             return rows;
         }
         catch(error) {
