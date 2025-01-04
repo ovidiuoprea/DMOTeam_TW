@@ -78,7 +78,7 @@ const ArticlePage = () => {
           </p>
         );
   
-        setParagraphs(newParagraphs); // Set paragraphs state
+        setParagraphs(<div className='text-justify'>{newParagraphs}</div>); 
       }
     }, [content]);
   
