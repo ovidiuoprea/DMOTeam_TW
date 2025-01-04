@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import Review from '../components/Review'
 import { useParams } from 'react-router-dom';
-import { getArticleById } from '../services/articleService';
+import { getArticleById, isReviewerAllocatedForArticle } from '../services/articleService';
 import { getArticleReviews } from '../services/reviewsService';
 import AddReview from '../components/AddReview';
 import { getCurrentAuthenticatedUser } from '../services/userService';
@@ -64,19 +64,19 @@ const ArticlePage = () => {
   
           // Add a pagination marker
           newParagraphs.push(
-            <p key={`page-${i}`}>
-              <br /><strong>Pagina {i + 1}</strong> <br /><br /><hr /><br />
+            <p key={`articlePage-${i}`}>
+              <br /><strong>Pagina {i + 1}</strong> <br /><br />
             </p>
           );
+          newParagraphs.push(
+            <div>
+              <hr /><br />
+            </div>
+          );
+          
   
           i++;
         }
-        newParagraphs.pop();
-        newParagraphs.push(
-          <p key={`page-${i - 1}`}>
-            <strong>Pagina {i}</strong> <br /> <br /><hr />
-          </p>
-        );
   
         setParagraphs(<div className='text-justify'>{newParagraphs}</div>); 
       }
@@ -89,7 +89,16 @@ const ArticlePage = () => {
     );
   };
     
+  const [isAllocatedReviewer, setisAllocatedReviewer] = useState(false);
 
+  useEffect(() => {
+    const checkReviewerAllocation = () => {
+      if (user?.role === 'Reviewer' && article) {
+        setisAllocatedReviewer(article.reviewer_id1 === user.user_id || article.reviewer_id2 === user.user_id);
+      }
+    };
+    checkReviewerAllocation();
+  }, [user, article]);
 
   return (
     <div className='w-full'>
@@ -134,12 +143,12 @@ const ArticlePage = () => {
             </div>
           </div>
 
-          {/* TO DO : VERIFICA DACA UTILIZATROUL ESTE REVIEWER */}
+          {isAllocatedReviewer &&
           <div className='bg-blue-700 text-white px-8 py-4 rounded-lg w-fit h-fit font-bold cursor-pointer'
             onClick={()=>{setAddReview(!addReview)}}
           >
             Adauga review
-          </div>
+          </div> }
         </div>
         
 
