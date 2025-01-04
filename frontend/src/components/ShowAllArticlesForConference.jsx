@@ -42,10 +42,10 @@ const ShowAllArticlesForConference = ( {conference_id} ) => {
           </tr>
         </thead>
         <tbody>
-          {articles.map(a => {
+          {articles.map((a, i) => {
               return (
                   <tr
-                    className='cursor-pointer'
+                    className={`${i % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200 cursor-pointer`}
                     onClick={()=>{handleNavigation(a.article_id)}}>
                       <td className="border border-gray-300 px-4 py-2">{a.title}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.name}</td>
