@@ -68,8 +68,9 @@ const ShowAllArticles = ({show_all, reviewer_id}) => {
           {articles.map((a, index) => {
               return (
                   <tr
+                      onClick={()=>{window.location.href="/article/" + a.article_id}}
                       key={index}
-                      className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200`}>
+                      className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200 cursor-pointer`}>
                       <td className="border border-gray-300 px-4 py-2">{a.title}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.conference_name ? a.conference_name : a.conference_id}</td>
                       <td className="border border-gray-300 px-4 py-2">{a.author_id}</td>
