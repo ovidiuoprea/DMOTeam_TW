@@ -9,8 +9,6 @@ const OrganizatorUI = ({user}) => {
   const [conferenceEditMode, setConferenceEditMode] = useState(false);
   const [conferenceToEdit, setConferenceToEdit] = useState(null);
 
-  const [forceReRender, setForceRerender] = useState(0);
-
   const CREATE_CONFERENCE_PAGE = 1;
   const SHOW_ALL_ARTICLES_PAGE = 2;
   const SHOW_CREATED_CONFERENCES = 3;

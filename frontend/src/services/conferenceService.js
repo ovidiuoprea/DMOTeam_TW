@@ -72,3 +72,26 @@ export const getConferencesByOrganizerID = async (organizer_id) => {
     }
 }
 
+export const updateConference = async (conference_id, name, description) => { 
+    try {
+        const url = API_URL + "/conference/" + conference_id;
+
+        const response = await fetch(url,{
+            method:"PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+              "conference_id": conference_id,
+              "name": name,
+              "description": description
+            })
+          });
+        const result = await response.json();
+
+        return result;
+    }
+    catch(error) {
+        console.error("Error: ", error.message);
+    }
+}

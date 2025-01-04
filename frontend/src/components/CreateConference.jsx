@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button';
-import { createConference } from '../services/conferenceService';
+import { createConference, updateConference } from '../services/conferenceService';
 import { getReviewers } from '../services/userService';
-import { createConferenceReviewer, getConferenceReviewerByConferenceID } from '../services/conferenceReviewersService';
+import { createConferenceReviewer,  } from '../services/conferenceReviewersService';
 
 const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
-    const [conferenceName,setConferenceName]=useState("");
-    const [conferenceDescription,setConferenceDescription]=useState("");
+    const [conferenceName,setConferenceName]=useState(edit_mode ? conferenceToEdit.name : "");
+    const [conferenceDescription,setConferenceDescription]=useState(edit_mode ? conferenceToEdit.description : "");
+    const [updatedConference, setUpdatedConference] = useState(false);
 
     const [reviewers,setReviewers]=useState([]);
     const [selectedReviewers, setSelectedReviewers] = useState([]); 
@@ -46,6 +47,10 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
     }
     else {
         //TODO: Update conference;
+        const response = await updateConference(conferenceToEdit.conference_id, conferenceName, conferenceDescription);
+        if(!response.error) {
+            setUpdatedConference(true);
+        }
     }
   }
 
@@ -82,31 +87,36 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
             />
         </div>
 
-        <div className="mb-4">
-            <label htmlFor="" className="block text-sm font-medium text-gray-600 mb-1">Revieweri</label>
-            <div className='flex flex-wrap gap-4'>
-              {reviewers.map((r) => (
-                <div
-                  key={r.user_id}
-                  onClick={() => handleSelectReviewer(r.user_id)}
-                  className={`p-4 mb-4 cursor-pointer rounded-lg transition-colors 
-                    ${ selectedReviewers.includes(r.user_id) ? "bg-green-500 text-white" : "bg-gray-100" }}`}
-                >
-                  {r.name}
+        {!edit_mode && ( 
+            <div className="mb-4">
+                <label htmlFor="" className="block text-sm font-medium text-gray-600 mb-1">Revieweri</label>
+                <div className='flex flex-wrap gap-4'>
+                    {reviewers.map((r) => (
+                        <div
+                            key={r.user_id}
+                            onClick={() => handleSelectReviewer(r.user_id)}
+                            className={`p-4 mb-4 cursor-pointer rounded-lg transition-colors 
+                                ${ selectedReviewers.includes(r.user_id) ? "bg-green-500 text-white" : "bg-gray-100" }}`}
+                            >
+                        {r.name}
+                        </div>
+                    ))}
                 </div>
-              ))}
             </div>
-        </div>
+        )}
+        
+        <p className='flex justify-center mt-8 text-green-700'>{updatedConference ? "Conferinta actualizata cu succes!" : ""}</p>
 
         <div className='flex justify-center mt-8'>
           <button 
             type="submit"
-            className={`w-fit px-8 text-white py-2 rounded-lg  ${selectedReviewers.length < 2 ? "bg-gray-700 " : "bg-blue-800 hover:bg-blue-600 transition-colors"}`}
-            disabled={selectedReviewers.length<2}            
+            className={`w-fit px-8 text-white py-2 rounded-lg  ${!edit_mode ? (selectedReviewers.length < 2 ? "bg-gray-700 " : "bg-blue-800 hover:bg-blue-600 transition-colors") : "bg-blue-800 hover:bg-blue-600 transition-colors"}`}
+            disabled= {!edit_mode ? selectedReviewers.length<2 : false}            
           >
             Salvare conferință
           </button>
         </div>
+
         
       </form>
     </div>
