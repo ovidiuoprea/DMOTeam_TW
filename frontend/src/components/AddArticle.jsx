@@ -31,7 +31,7 @@ const AddArticle = ({ conference_id }) => {
       const response = await createArticle(articleItem);
       if(response.ok){
         setUsed(true);
-        window.confirm('Article ' + response.result.title + ' Added Successfully');
+        window.confirm('Articolul ' + response.result.title + ' a fost adăugat cu succes!');
         window.location.reload();
       }
     }
