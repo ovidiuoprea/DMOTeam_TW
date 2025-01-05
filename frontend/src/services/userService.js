@@ -147,3 +147,17 @@ export const getArticlesForReviewer = async (reviewer_id) => {
         console.error(error.message);
     }
 }
+
+export const getUserById= async(user_id)=>{
+    try {
+        const response=await fetch(API_URL+`/user/${user_id}`)
+        if(!response.ok){
+            throw new Error("Problema la fetch");
+        }
+        const result =await response.json();
+        return result;
+    
+    } catch (error) {
+        console.error(error.message);
+    }
+}

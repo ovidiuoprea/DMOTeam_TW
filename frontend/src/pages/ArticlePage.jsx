@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getArticleById, isReviewerAllocatedForArticle } from '../services/articleService';
 import { getArticleReviews } from '../services/reviewsService';
 import AddReview from '../components/AddReview';
-import { getCurrentAuthenticatedUser } from '../services/userService';
+import { getCurrentAuthenticatedUser, getUserById } from '../services/userService';
 
 
 
@@ -17,6 +17,7 @@ const ArticlePage = () => {
   const [article,setArticle]=useState(null);
   const [reviews,setReviews]=useState([]);
   const [addReview,setAddReview]=useState(false);
+  const [reviewers,setReviewers]=useState([]);
 
   useEffect(()=>{
     const fetchArticleData=async ()=>{
@@ -25,8 +26,12 @@ const ArticlePage = () => {
       setArticle(article);
 
       const reviewsData=await getArticleReviews(article_id);
-      console.log(reviewsData);
       setReviews(reviewsData)
+
+      const articleReviewer1= await getUserById(article.reviewer_id1);
+      const articleReviewer2= await getUserById(article.reviewer_id2);
+
+      setReviewers([articleReviewer1,articleReviewer2]);
     }
 
     fetchArticleData();
@@ -56,13 +61,11 @@ const ArticlePage = () => {
             </p>
           );
   
-          // If the page content is too short and not the first page, add padding
           while (pageContent.length < 2200 && i !== 0) {
             pageContent += '_____________________________________________________________________________';
             if(pageContent.length < 2200 ) newParagraphs.push(<br />);
           }
   
-          // Add a pagination marker
           newParagraphs.push(
             <p key={`articlePage-${i}`}>
               <br /><strong>Pagina {i + 1}</strong> <br /><br />
@@ -104,7 +107,7 @@ const ArticlePage = () => {
     <div className='w-full'>
       <NavBar />  
       <div className='grid grid-cols-[1fr_2.5fr] max-lg:grid-cols-1 h-full w-full pt-[80px] bg-gray-200'>
-        <div className='flex justify-center p-10 px-2'>
+        <div className='flex flex-col items-center p-10 px-2 gap-12'>
           <div className='bg-white w-fit h-fit grid grid-cols-2 p-2 rounded-lg'>
             <div className='flex flex-col p-4 gap-3'>
               <p className='text-right'>Autorul articolului: </p>
@@ -115,6 +118,17 @@ const ArticlePage = () => {
               <span className='font-bold'>{article?.author_name}</span> 
               <span className='font-bold'>{article?.conference_name}</span>
               <span className={'font-bold '+ (article?.is_approved?"text-green-700":"text-red-700")}>{article?.is_approved?"Aprobat":"Neaprobat"}</span>
+            </div>
+          </div>
+
+          <div className='bg-white w-fit h-fit grid grid-cols-[1.5fr_2fr] p-2 rounded-lg'>
+            <div className='flex flex-col p-4 gap-3'>
+              <p className='text-right'>Reviewer&nbsp;1<span className="material-symbols-outlined text-[20px] text-yellow-500">star</span></p>
+              <p className='text-right'>Reviewer&nbsp;2<span className="material-symbols-outlined text-[20px] text-yellow-500">star</span></p>    
+            </div>
+            <div className='flex flex-col p-4 gap-3 '>
+              <span className='font-bold'>{reviewers[0]?.name}</span> 
+              <span className='font-bold'>{reviewers[1]?.name}</span>
             </div>
           </div>
         </div>
@@ -163,11 +177,7 @@ const ArticlePage = () => {
             )
           })}
         </div>
-        
       </div>
-      
-
-      
     </div>
   )
 }
