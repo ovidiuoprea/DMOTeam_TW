@@ -5,7 +5,7 @@ import { getCurrentAuthenticatedUser } from '../services/userService';
 const NavBar = () => {
     const [user, setUser] = useState(getCurrentAuthenticatedUser());
   return (
-    <div className='w-full h-[80px] bg-gray-100 flex items-center justify-between px-8 fixed'> 
+    <div className='w-full h-[80px] bg-gray-100 flex items-center justify-between px-8 fixed z-50'> 
       <div className='flex items-center'>
         <img src="/svg/articles.svg" height={50} width={50} alt='logo' onClick={()=>{window.location.href="/"}} style={{cursor: 'pointer'}}/>
         <p className='text-xl font-bold text-gray-700'>Review Conference Platform</p>

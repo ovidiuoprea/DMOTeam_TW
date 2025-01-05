@@ -6,6 +6,7 @@ import { getArticleById, isReviewerAllocatedForArticle } from '../services/artic
 import { getArticleReviews } from '../services/reviewsService';
 import AddReview from '../components/AddReview';
 import { getCurrentAuthenticatedUser, getUserById } from '../services/userService';
+import EditArticle from '../components/EditArticle';
 
 
 
@@ -18,6 +19,7 @@ const ArticlePage = () => {
   const [reviews,setReviews]=useState([]);
   const [addReview,setAddReview]=useState(false);
   const [reviewers,setReviewers]=useState([]);
+  const [editMode,setEditMode]=useState(false);
 
   useEffect(()=>{
     const fetchArticleData=async ()=>{
@@ -103,6 +105,11 @@ const ArticlePage = () => {
     checkReviewerAllocation();
   }, [user, article]);
 
+  const toggleEditMode=()=>{
+    console.log("Toggle")
+    editMode?setEditMode(false):setEditMode(true);
+  }
+
   return (
     <div className='w-full'>
       <NavBar />  
@@ -132,11 +139,24 @@ const ArticlePage = () => {
             </div>
           </div>
         </div>
-        <div className='flex justify-center p-10 px-2'>
-          <div className='flex flex-col max-w-[700px] w-[700px] min-h-[800px] max-h-[800px] bg-white p-10 pl-16 gap-10 overflow-y-scroll'>
+        <div className='flex justify-center p-10 px-2 '>
+          {!editMode && (
+          <div className='flex flex-col max-w-[700px] w-[700px] min-h-[800px] max-h-[800px] bg-white p-10 pt-14 pl-16 gap-10 overflow-y-scroll relative'>
+            {(user.user_id===article?.author_id) && (
+              <div className='absolute right-0 top-0 bg-gray-500 text-white rounded-md px-4 py-2 text-lg cursor-pointer select-none'
+                onClick={toggleEditMode}
+              >
+                Editeaza
+              </div>
+            )}
             <h1 className='font-bold text-2xl text-center'>{article?.title}</h1>
             <ArticlePagination content = {article?.content} />
           </div>
+          )}
+          {editMode && (
+            <EditArticle article={article} toggleEditMode={toggleEditMode} />
+          )
+          }
         </div>
         
       </div>
