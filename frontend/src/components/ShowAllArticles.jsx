@@ -37,15 +37,17 @@ const ShowAllArticles = ({show_all, reviewer_id}) => {
         const fetchData = async ()=> {
             const articles = await getArticlesForReviewer(reviewer_id);
 
-            const updatedArticles = await Promise.all(
-                articles.map(async (article) => {
-                    const conference = await getConferenceByID(article.conference_id);
-                    article.conference_name = conference.name;
-                    return article; 
-                })
+            if(articles){
+              const updatedArticles = await Promise.all(
+                  articles.map(async (article) => {
+                      const conference = await getConferenceByID(article.conference_id);
+                      article.conference_name = conference.name;
+                      return article; 
+                  })
             )
           
             setArticles(updatedArticles);
+          }
         }
         fetchData();
     }
@@ -65,7 +67,7 @@ const ShowAllArticles = ({show_all, reviewer_id}) => {
           </tr>
         </thead>
         <tbody>
-          {articles.map((a, index) => {
+          {articles?.map((a, index) => {
               return (
                   <tr
                       onClick={()=>{window.location.href="/article/" + a.article_id}}
