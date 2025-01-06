@@ -44,11 +44,13 @@ articlesRouter.route('/article/:article_id')
     const updatedArticleData = req.body;
     const article_id = req.params.article_id;
 
+
     if(!updatedArticleData || Object.keys(updatedArticleData).length == 0) {
         return res.status(400).json({"message": "Invalid request"});
     }
 
     let result = await updateArticle(article_id, updatedArticleData);
+
 
     if(result.error) {
         res.status(400).json(result.message);

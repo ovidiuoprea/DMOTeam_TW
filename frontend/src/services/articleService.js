@@ -47,3 +47,21 @@ export const createArticle = async (articleData) => {
     return { error: error.message }; 
   }
 };
+
+export const saveArticle =async(updatedArticle)=>{
+  try {
+    const response=await fetch(API_URL+`/article/${updatedArticle.article_id}`,{
+      method:"PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(
+        updatedArticle
+      )
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error: ", error.message);
+  }
+}

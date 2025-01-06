@@ -40,7 +40,7 @@ async function createArticle(article, ORM = true) {
 
 
 
-async function updateArticle(id, updatedArticleData, ORM = true) {
+async function updateArticle(id, updatedArticleData, ORM = false) {
 
   if(parseInt(id) !== updatedArticleData.article_id) {
       return {error: true, message: "Provided article_id does not match Article!"}
@@ -52,14 +52,14 @@ async function updateArticle(id, updatedArticleData, ORM = true) {
   }
 
   if(!ORM) { 
-      try{ 
-          const sql = "UPDATE Articles SET ? WHERE article_id = ?";
-          const [rows] = await conn.query(sql, updatedArticleData, id);
-          return {error: false, message: "Article successfully updated", object: [...updatedArticleData]}
-      }
-      catch(error) { 
-          console.error(error);
-      } 
+    try { 
+      const sql = "UPDATE Articles SET ? WHERE article_id = ?";
+      const [rows] = await conn.query(sql, [updatedArticleData, id]);
+      return {error: false, message: "Article successfully updated", object: {...updatedArticleData}};
+    } catch (error) { 
+        console.error(error);
+        return {error: true, message: "Failed to update article. Please try again."};
+    } 
   }
   else {
       return {error: false, message: "Article successfuly updated", object: await existingArticle.update(updatedArticleData)};

@@ -24,7 +24,6 @@ const ArticlePage = () => {
   useEffect(()=>{
     const fetchArticleData=async ()=>{
       const article=await getArticleById(article_id);
-      console.log(article);
       setArticle(article);
 
       const reviewsData=await getArticleReviews(article_id);
@@ -106,7 +105,6 @@ const ArticlePage = () => {
   }, [user, article]);
 
   const toggleEditMode=()=>{
-    console.log("Toggle")
     editMode?setEditMode(false):setEditMode(true);
   }
 
@@ -154,7 +152,7 @@ const ArticlePage = () => {
           </div>
           )}
           {editMode && (
-            <EditArticle article={article} toggleEditMode={toggleEditMode} />
+            <EditArticle article={article} toggleEditMode={toggleEditMode}/>
           )
           }
         </div>
