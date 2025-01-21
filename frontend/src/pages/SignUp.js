@@ -14,7 +14,14 @@ const SignUp = () => {
             const response = await signUp(name, email, password, role);
 
             if(response.data){
-                updateLocalStorage(response.data, 3);
+                let response_user = response.data;
+                const user = {
+                    email: response_user.email,
+                    name: response_user.name,
+                    role: response_user.role,
+                    user_id: response_user.user_id
+                }
+                updateLocalStorage(user, 3);
 
                 setTimeout(()=>{
                     window.location.href="/"
@@ -106,7 +113,7 @@ const SignUp = () => {
           type="submit" 
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
         >
-          Login
+          Sign up
         </button>
       </form>
       <p className="text-sm text-gray-600 text-center mt-4">

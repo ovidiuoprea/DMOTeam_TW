@@ -26,7 +26,13 @@ const Login = () => {
         }
 
         if(logged_in_user) {
-            updateLocalStorage(logged_in_user, 3);
+            const user = {
+                email: logged_in_user.email,
+                name: logged_in_user.name,
+                role: logged_in_user.role,
+                user_id: logged_in_user.user_id
+            }
+            updateLocalStorage(user, 3);
 
             setTimeout(()=> {
                 window.location.href="/";
