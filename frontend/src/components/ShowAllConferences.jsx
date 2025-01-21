@@ -39,6 +39,7 @@ const ShowAllConferences = ({user, onEdit}) => {
 
   const registerToConference= async (conference_id)=>{
     await createConferenceAuthor(conference_id,user.user_id);
+    setConferences(conferences.filter(c=>c.conference_id!=conference_id))
   }
 
   const handleNavigation= async (conference_id)=>{
