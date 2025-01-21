@@ -4,7 +4,6 @@ import { getCurrentAuthenticatedUser, logout, updateUserRole } from '../services
 
 const NavBar = () => {
     const [user, setUser] = useState(getCurrentAuthenticatedUser());
-    const [role,setRole]=useState(user.role);
 
   return (
     <div className='w-full h-[80px] bg-gray-100 flex items-center justify-between px-8 fixed z-50'> 
@@ -20,25 +19,27 @@ const NavBar = () => {
       </a> 
       }
 
+    {
+    user && 
     <div className='flex gap-1'>
-      <div 
-        className={'border-4 rounded-md bg-white p-2 '+(user.role==='Organizer'?'text-blue-800 border-blue-800 font-bold':"")}
-        onClick={()=>{updateUserRole("Organizer");window.location.reload();}  }
-      >
-        Organizator</div>
-      <div 
-        className={'border-4 rounded-md bg-white p-2 '+(user.role==='Author'?'text-blue-800 border-blue-800 font-bold':"")}
-        onClick={()=>{updateUserRole("Author");window.location.reload();}}
-      >
-        Autor
-      </div>
-      <div 
-        className={'border-4 rounded-md bg-white p-2 '+(user.role==='Reviewer'?'text-blue-800 border-blue-800 font-bold':"")}
-        onClick={()=>{updateUserRole("Reviewer");window.location.reload();}}
-      >
-        Reviewer
-      </div>
+        <div 
+            className={'border-4 rounded-md bg-white p-2 '+(user.role==='Organizer'?'text-blue-800 border-blue-800 font-bold':"")}
+            onClick={()=>{updateUserRole("Organizer");window.location.reload();}  }>
+            Organizator
+        </div>
+        <div 
+            className={'border-4 rounded-md bg-white p-2 '+(user.role==='Author'?'text-blue-800 border-blue-800 font-bold':"")}
+            onClick={()=>{updateUserRole("Author");window.location.reload();}}>
+            Autor
+        </div>
+        <div 
+            className={'border-4 rounded-md bg-white p-2 '+(user.role==='Reviewer'?'text-blue-800 border-blue-800 font-bold':"")}
+            onClick={()=>{updateUserRole("Reviewer");window.location.reload();}}>
+            Reviewer
+        </div>
     </div>  
+    }
+    
 
 
       {
