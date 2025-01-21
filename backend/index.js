@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'
-
+import bcrypt from "bcrypt";
 
 import usersRouter from './routes/users.routes.js';
 import conferencesRouter from './routes/conferences.routes.js';
@@ -30,8 +30,11 @@ app.listen(port, ()=>{
     console.log(`server running on http://localhost:${port}`);
 });
 
-app.get("/", (req, res, next) => {
+app.get("/", async (req, res, next) => {
     res.status(200).json({"message": "OK"});
+    const PASSWORD = "test";
+    const hashed = await bcrypt.hash(PASSWORD, 10);
+    console.log(`Hashed for ${PASSWORD} is ${hashed}`);
 });
 
 Associations();

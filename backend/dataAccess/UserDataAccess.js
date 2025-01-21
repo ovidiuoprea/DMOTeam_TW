@@ -1,5 +1,6 @@
 import User from "../entities/User.js";
 import conn from "../dbConfig.js";
+import bcrypt from "bcrypt"
 
 /**
  * If ORM fails, call this as getUser(false), as it will switch to the default MySQL promise-based pool
@@ -73,6 +74,8 @@ async function getReviewerUsers(ORM = true) {
  */
 
 async function createUser(user, ORM = true) {
+    const user_hashed_password = await bcrypt.hash(user.password, 10);
+    user.password = user_hashed_password;
     if(!ORM) { 
         const sql = "INSERT INTO Users SET ?";
         const [result] = await conn.query(sql, user);
@@ -81,6 +84,7 @@ async function createUser(user, ORM = true) {
         return {user_id: result.insertId, ...user};
     }
     else {
+
         return await User.create(user);
     }
 }
@@ -178,7 +182,8 @@ async function login (provided_email, password, ORM = true) {
         if(!user) { 
             return {error: true, message: "User not found", object: null}
         }
-        if(password != user.password) {
+        const valid = await bcrypt.compare(password, user.password);
+        if(!valid) {
             return {error: true, message: "Passwords don't match", object: null};
         }
         return {error: false, message: "Login successful", object: user};
