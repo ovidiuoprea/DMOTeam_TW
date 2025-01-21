@@ -56,7 +56,7 @@ const ShowAllArticles = ({show_all, reviewer_id}) => {
   }, [show_all, reviewer_id]);
 
   return (
-    <div className="px-16 py-8">
+    <div className="px-16 py-8 overflow-auto h-screen-80">
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead className="bg-blue-700 text-white">
           <tr>

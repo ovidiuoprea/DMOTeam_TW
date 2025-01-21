@@ -61,6 +61,18 @@ export const getCurrentAuthenticatedUser = () => {
     }
 }
 
+export const updateUserRole = (newRole) => {
+    const authData = JSON.parse(localStorage.getItem("authData"));
+
+    if (authData && authData.user) {
+        authData.user.role = newRole;
+        localStorage.setItem("authData", JSON.stringify(authData));
+        console.log(`Rolul utilizatorului a fost actualizat la: ${newRole}`);
+    }
+
+    console.error("Nu s-a găsit utilizatorul autentificat în localStorage.");
+};
+
 export const logout = () => { 
     updateLocalStorage(null, -1);
 }

@@ -46,12 +46,13 @@ const ShowAllConferences = ({user, onEdit}) => {
   }
 
   return (
-    <div className='flex flex-col px-16 py-8 gap-4'>
+    <div className='flex flex-col px-16 py-8 gap-4 overflow-auto h-screen-80'>
       {conferences.map((c)=>{
         return(
           <div className='bg-gray-200 flex rounded-md px-8 py-2 justify-between items-center'>
             <p>{c.conference_id}</p> 
             <p>{c.name ? c.name : "Nume conferinta***" }</p>
+            <div className='flex gap-4'>
             {
                 (user && user.role === "Author") ?
                 (
@@ -77,6 +78,7 @@ const ShowAllConferences = ({user, onEdit}) => {
             >
               Acceseaza
             </button>
+            </div>
           </div>
         )
       })}

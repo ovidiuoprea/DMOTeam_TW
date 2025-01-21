@@ -12,6 +12,10 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
     const [reviewers,setReviewers]=useState([]);
     const [selectedReviewers, setSelectedReviewers] = useState([]); 
 
+    const [notification, setNotification] = useState(false);
+    const [error,setError]=useState(false); 
+
+
 
     useEffect(() => {
         const fetchReviewers = async () => {
@@ -37,21 +41,34 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
   const handleOnSubmit =async (e)=>{
     e.preventDefault();
 
-    if(!edit_mode) {
-
+    try {
+      if(!edit_mode) {
         const conferenceId= await createConference(user.user_id, conferenceName, conferenceDescription);
         
         selectedReviewers.map((selectedReviewer)=>{
           createConferenceReviewer(selectedReviewer,conferenceId)
         })
-    }
-    else {
-        //TODO: Update conference;
-        const response = await updateConference(conferenceToEdit.conference_id, conferenceName, conferenceDescription);
-        if(!response.error) {
-            setUpdatedConference(true);
-        }
-    }
+      }
+      else {
+          const response = await updateConference(conferenceToEdit.conference_id, conferenceName, conferenceDescription);
+          if(!response.error) {
+              setUpdatedConference(true);
+          }
+      }
+  } catch (error) {
+    setError(true);
+  }
+  finally{
+    setNotification(true);
+    setTimeout(() => {
+      setNotification(false)
+    }, 3000);
+  }
+    
+
+    setSelectedReviewers([]);
+    setConferenceName('');
+    setConferenceDescription('');
   }
 
   return (
@@ -69,6 +86,7 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
               required 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               defaultValue={edit_mode ? conferenceToEdit.name : ""}
+              value={conferenceName}
               onChange={(event)=>{setConferenceName(event.target.value)}}
             />
         </div>
@@ -83,6 +101,7 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
               required 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               defaultValue={edit_mode ? conferenceToEdit.description : ""}
+              value={conferenceDescription}
               onChange={(event)=>{setConferenceDescription(event.target.value)}}
             />
         </div>
@@ -116,6 +135,12 @@ const CreateConference = ({user, edit_mode, conferenceToEdit}) => {
             Salvare conferință
           </button>
         </div>
+
+        {notification && (
+        <div className={"mt-4 px-4 py-2  rounded-lg shadow-md border text-center "+(error?"text-red-700 border-red-300 bg-red-100":"bg-green-100 text-green-700 border-green-300")}>
+          {error?"A apărut o eroare la salvare, va rog încercați mai tarziu":"Salvarea s-a efectuat cu succes"}
+        </div>
+      )}
 
         
       </form>
