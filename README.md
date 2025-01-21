@@ -13,15 +13,15 @@ Tema 7 - Conference Organizer - Aplicație web pentru organizarea de conferințe
 - baza de date: MySQL
 
 ## Instructiuni de rulare
-### Front-end:
-`cd frontend`
-`npm i`
-`npm start`
+### Front-end:  
+`cd frontend`  
+`npm i`  
+`npm start`  
 
-### Back-end
-`cd backend`
-`npm i`
-`npm start`
+### Back-end  
+`cd backend`  
+`npm i`  
+`npm start`  
 
 ### Baza de date
 Rulare script de migrare cu prefix **USE_latest**
