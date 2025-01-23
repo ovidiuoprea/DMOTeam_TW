@@ -18,7 +18,7 @@ const NotLoggedInUI = () => {
                     user_id: 12
                 }
                 break;
-            case "Author1":
+            case "Author":
                 user = {
                     email: "ovidiu@autor1.com",
                     name: "Ovidiu Autor 1",
@@ -26,13 +26,6 @@ const NotLoggedInUI = () => {
                     user_id: 13
                 }
                 break;
-            case "Author2":
-                user = {
-                    email: "ovidiu@autor2.com",
-                    name: "Ovidiu Autor 2",
-                    role: "Author",
-                    user_id: 14
-                }
             case "Reviewer":
                 user = {
                     email: "ovidiu@reviewer.com",
@@ -40,6 +33,15 @@ const NotLoggedInUI = () => {
                     role: "Reviewer",
                     user_id: 15
                 }
+                break;
+            case "Reviewer2":
+                user = {
+                    email: "marius@reviewer2.com",
+                    name: "Marius Reviewer",
+                    role: "Reviewer",
+                    user_id: 17
+                }
+                break;
         }
         updateLocalStorage(user, 3);
         window.location.reload();
@@ -64,8 +66,8 @@ const NotLoggedInUI = () => {
                     <div  className="mt-16 flex flex-col items-center justify-center gap-8">
                         <Button text={"Organizer instant login"} onClick={() => oneTimeLogin("Organizer")} />
                         <Button text={"Reviewer instant login"} onClick={() => oneTimeLogin("Reviewer")} />
-                        <Button text={"Author1 instant login"} onClick={() => oneTimeLogin("Author1")} />
-                        <Button text={"Author2 instant login"} onClick={() => oneTimeLogin("Author2")} />
+                        <Button text={"Reviewer2 instant login"} onClick={() => oneTimeLogin("Reviewer2")} />
+                        <Button text={"Author instant login"} onClick={() => oneTimeLogin("Author")} />
 
                     </div>}
                 
