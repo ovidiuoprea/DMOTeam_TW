@@ -16,7 +16,8 @@ reviewsRouter.route('/review/:article_id')
 reviewsRouter.route('/review-reviewer/:reviewer_id')
     .get(async(req,res)=>{
         const reviewer_id=req.params.reviewer_id;
-        res.status(200).json(await getReviewsByReviewerId(reviewer_id))
+        const article_id=req.body.article_id;
+        res.status(200).json(await getReviewsByReviewerId(reviewer_id,article_id))
     })
 
 reviewsRouter.route('/associations-test')

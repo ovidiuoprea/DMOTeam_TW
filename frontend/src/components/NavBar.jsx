@@ -19,7 +19,7 @@ const NavBar = () => {
       </a> 
       }
 
-    {
+    {/* {
     user && 
     <div className='flex gap-1'>
         <div 
@@ -38,7 +38,7 @@ const NavBar = () => {
             Reviewer
         </div>
     </div>  
-    }
+    } */}
     
 
 

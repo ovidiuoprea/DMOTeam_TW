@@ -19,7 +19,11 @@ export const getArticleReviews = async (article_id)=>{
 //Daca exista deja un review pentru utilizatorul curent facem update pe review daca nu il cream
 export const createReview = async (rating,feedback,reviewer_id,article_id,is_approved)=>{
   try {
-    const exists=await fetch(API_URL+`/review-reviewer/${reviewer_id}`)
+    const exists=await fetch(API_URL+`/review-reviewer/${reviewer_id}`,{
+      body:{
+        article_id:article_id
+      }
+    })
     if (!exists.ok){
       throw new Error("Problema la fetch " + exists.status);
     }

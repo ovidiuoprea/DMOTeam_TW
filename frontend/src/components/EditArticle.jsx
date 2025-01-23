@@ -6,6 +6,7 @@ const EditArticle = ({article,toggleEditMode,setArticle}) => {
   const [newTitle,setNewTtile]=useState(article.title);
   const [newContent,setNewContent]=useState(article.content);
 
+
   const updateArticle=async ()=>{
       const newArticle={
         article_id:article.article_id,
@@ -36,8 +37,9 @@ const EditArticle = ({article,toggleEditMode,setArticle}) => {
       <textarea 
         defaultValue={article.content}
         onChange={(e)=>setNewContent(e.target.value)}
-        className='border-2 border-gray-400 rounded-md'
+        className='border-2 border-gray-400 rounded-md h-full'
       />
+
     </div>
   )
 }

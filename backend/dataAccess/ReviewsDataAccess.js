@@ -42,10 +42,10 @@ async function getReviewsData(article_id,ORM=false) {
   }
 }
 
-async function getReviewsByReviewerId(reviewer_id, ORM = true) {
+async function getReviewsByReviewerId(reviewer_id,article_id, ORM = false) {
   if (!ORM) {
-    const sql = `SELECT review_id FROM reviews WHERE reviewer_id = ? LIMIT 1`;
-    const [rows] = await conn.query(sql, [reviewer_id]);
+    const sql = `SELECT review_id FROM reviews WHERE reviewer_id = ? AND article_id= ? LIMIT 1`;
+    const [rows] = await conn.query(sql, [reviewer_id,article_id]);
     return rows.length > 0 ? rows[0].review_id : false; 
   } 
   else {
