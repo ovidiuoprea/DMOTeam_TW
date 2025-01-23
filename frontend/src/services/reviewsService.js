@@ -20,10 +20,14 @@ export const getArticleReviews = async (article_id)=>{
 export const createReview = async (rating,feedback,reviewer_id,article_id,is_approved)=>{
   try {
     const exists=await fetch(API_URL+`/review-reviewer/${reviewer_id}`,{
+        method: 'POST',
       body:{
         article_id:article_id
       }
-    })
+    });
+
+    console.log("Exists: ", exists);
+
     if (!exists.ok){
       throw new Error("Problema la fetch " + exists.status);
     }
@@ -53,6 +57,7 @@ export const createReview = async (rating,feedback,reviewer_id,article_id,is_app
       console.log(resultUpdate);
     }
     else{
+        console.log("Ar trebui sa fiu aici, in create");
       const response = await fetch(API_URL + "/review",{
         method:"POST",
         headers: {

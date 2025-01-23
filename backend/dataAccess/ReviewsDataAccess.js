@@ -68,6 +68,7 @@ async function getReviewsByReviewerId(reviewer_id,article_id, ORM = false) {
  */
 
 async function createReview(review, ORM = true) {
+    console.log("Create review!");
   if(!ORM) { 
       const sql = "INSERT INTO reviews SET ?";
       const [result] = await conn.query(sql, review);

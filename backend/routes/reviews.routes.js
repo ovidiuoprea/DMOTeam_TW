@@ -14,9 +14,10 @@ reviewsRouter.route('/review/:article_id')
     });
 
 reviewsRouter.route('/review-reviewer/:reviewer_id')
-    .get(async(req,res)=>{
+    .post(async(req,res)=>{
         const reviewer_id=req.params.reviewer_id;
         const article_id=req.body.article_id;
+        console.log("Reviewer id: ", reviewer_id, article_id);
         res.status(200).json(await getReviewsByReviewerId(reviewer_id,article_id))
     })
 
@@ -26,11 +27,12 @@ reviewsRouter.route('/associations-test')
 reviewsRouter.route('/review')
     .post(async (req, res) => { 
         const review = req.body;
-        if(!review || Object.keys(review).length == 0) {
+        console.log(review);
+        if(!review || Object.keys(review).length === 0) {
             return res.status(400).json({"message": "Invalid request"});
         }
-        if(!review.rating || !review.feedback || !review.reviewer_id || !review.article_id || !review.is_approved) {
-            res.status(400).json({"message": "Invalid review object"});
+        if(!review.rating || !review.feedback || !review.reviewer_id || !review.article_id) {
+            res.status(401).json({"message": "Invalid review object"});
         }
         else {
             res.status(201).json(await createReview(req.body))
